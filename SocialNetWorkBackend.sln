@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NotificationService", "Noti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationPresentation", "NotificationPresentation\NotificationPresentation.csproj", "{5E7B29E2-983C-4B31-9B42-EFD398F5F53E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerViewModel", "ConsumerViewModel\ConsumerViewModel.csproj", "{58DF513D-9A4B-4525-9960-EDCD926C31CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerViewModel", "ConsumerViewModel\ConsumerViewModel.csproj", "{58DF513D-9A4B-4525-9960-EDCD926C31CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

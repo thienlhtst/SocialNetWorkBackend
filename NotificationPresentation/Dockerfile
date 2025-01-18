@@ -12,21 +12,18 @@ USER root
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UserPresentation/UserPresentation.csproj", "UserPresentation/"]
-COPY ["UserApplication/UserApplication.csproj", "UserApplication/"]
+COPY ["NotificationPresentation/NotificationPresentation.csproj", "NotificationPresentation/"]
 COPY ["ConsumerViewModel/ConsumerViewModel.csproj", "ConsumerViewModel/"]
-COPY ["UserInfrastructure/UserInfrastructure.csproj", "UserInfrastructure/"]
-COPY ["UserCore/UserCore.csproj", "UserCore/"]
-RUN dotnet restore "./UserPresentation/./UserPresentation.csproj"
+RUN dotnet restore "./NotificationPresentation/./NotificationPresentation.csproj"
 COPY . .
-WORKDIR "/src/UserPresentation"
-RUN dotnet build "./UserPresentation.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+WORKDIR "/src/NotificationPresentation"
+RUN dotnet build "./NotificationPresentation.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./UserPresentation.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./NotificationPresentation.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UserPresentation.dll"]
+ENTRYPOINT ["dotnet", "NotificationPresentation.dll"]

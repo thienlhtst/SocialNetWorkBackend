@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using NotificationPresentation.Consumers;
 using NotificationPresentation.Hubs;
 using NotificationPresentation.Infrastucture;
+using NotificationPresentation.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("NotificationDbSC");
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<NotificationDbContext>(options =>
 builder.Services.AddSignalR(); // Thêm SignalR
 
 // Add services to the container.
-
+builder.Services.AddTransient<INotificationService, NotificationService>();
 //
 builder.Services.AddMassTransit(x =>
 {
@@ -29,10 +30,10 @@ builder.Services.AddMassTransit(x =>
     x.AddActivities(asb);
     x.UsingRabbitMq((ctx, cfg) =>
     {
-        cfg.Host("localhost", "/", h =>
+        cfg.Host("localhost", h =>
         {
-            h.Username("guest");
-            h.Password("guest");
+            h.Username("admin");
+            h.Password("admin");
         });
         cfg.ConfigureEndpoints(ctx);
     });
@@ -67,7 +68,7 @@ app.UseSwagger();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.MapGet("/", () => "MassTransit with RabbitMQ on Docker!"); ;
 app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub"); // Map SignalR Hub
 

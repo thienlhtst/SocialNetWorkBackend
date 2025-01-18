@@ -1,14 +1,14 @@
 version : '3.7'
 
 services:
-  db:
-    container_name: db
+  db-sc:
+    container_name: db-sc
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       SA_PASSWORD: Thien@123456
       ACCEPT_EULA: Y
     ports:
-      - "1444:1433"
+      - "1445:1433"
     networks:
       - SC-mynetwork
 
@@ -23,26 +23,47 @@ services:
       - SC-mynetwork
     environment:
       ASPNETCORE_ENVIRONMENT : Staging
-    volumes:
-      - '../UserService/UserPresentation:/app/data'
+      RABBITMQ__HOST: rabbitmq
+      RABBITMQ__USERNAME: admin
+      RABBITMQ__PASSWORD: admin
     depends_on:
-      - db
-
-
+      - db-sc
+      - rabbitmq
+      
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ./
+      dockerfile: NotificationPresentation\Dockerfile
+    ports:
+      - 3334:80
+    networks :
+      - SC-mynetwork
+    environment:
+      ASPNETCORE_ENVIRONMENT : Staging
+      RABBITMQ__HOST: rabbitmq
+      RABBITMQ__USERNAME: admin
+      RABBITMQ__PASSWORD: admin
+    depends_on:
+      - db-sc
+      - rabbitmq
+   
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq'
+    container_name: rabbitmq
     ports:
         - 5672:5672
         - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
     volumes:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
         - SC-mynetwork
-
-  
+    
 networks:
   SC-mynetwork:
     driver : bridge

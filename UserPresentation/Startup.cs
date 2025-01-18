@@ -38,6 +38,7 @@ namespace UserPresentation
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
@@ -71,14 +72,15 @@ namespace UserPresentation
             {
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.Host("localhost", "/", h =>
+                    cfg.Host("localhost", h =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        h.Username("admin");
+                        h.Password("admin");
                     });
                     cfg.ConfigureEndpoints(ctx);
                 });
             });
+            services.AddMassTransitHostedService();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options =>
