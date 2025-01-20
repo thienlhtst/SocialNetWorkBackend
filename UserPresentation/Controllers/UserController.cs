@@ -31,9 +31,8 @@ namespace UserPresentation.Controllers
         [AllowAnonymous]
         [HttpGet("userinfo/{name}")]
         public async Task<IActionResult> GetUserInfo(string name)
-
         {
-            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+            var username = await _userService.GetstringAccountUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var result = await _userService.GetInformationUser(name);
             if (username ==name) return Ok(new { type = "private", info = result });
             return Ok(new { type = "public", info = result });

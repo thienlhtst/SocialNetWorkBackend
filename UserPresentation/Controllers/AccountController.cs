@@ -50,6 +50,7 @@ namespace UserPresentation.Controllers
             if (result.Succeeded)
             {
                 var token = GenerateJwtToken(checkaccount);
+
                 return Ok(new { token });
             }
 
@@ -62,10 +63,9 @@ namespace UserPresentation.Controllers
             {
             new Claim(ClaimTypes.Name, user.AcountName),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
+             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim("Id" , user.Id),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

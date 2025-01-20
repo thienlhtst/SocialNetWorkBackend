@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using MassTransit;
@@ -74,7 +75,7 @@ namespace UserPresentation
             {
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.Host("localhost", "/", h =>
+                    cfg.Host("rabbitmq", "/", h =>
                     {
                         h.Username("admin");
                         h.Password("admin");
@@ -95,15 +96,24 @@ namespace UserPresentation
                                 ValidateIssuerSigningKey = true,
                                 ValidIssuer = Configuration["Jwt:Issuer"],
                                 ValidAudience = Configuration["Jwt:Audience"],
-                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                             };
                             options.Events = new JwtBearerEvents
                             {
-                                OnAuthenticationFailed = context =>
+                                OnTokenValidated = context =>
                                 {
-                                    if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                                    if (claimsIdentity != null)
                                     {
-                                        context.Response.Headers.Add("Token-Expired", "true");
+                                        // Thêm claim tùy chỉnh từ token vào User.Claims
+                                        var jwtToken = context.SecurityToken as JwtSecurityToken;
+                                        if (jwtToken != null)
+                                        {
+                                            foreach (var claim in jwtToken.Claims)
+                                            {
+                                                claimsIdentity.AddClaim(claim);
+                                            }
+                                        }
                                     }
                                     return Task.CompletedTask;
                                 }
@@ -144,6 +154,19 @@ namespace UserPresentation
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.Use(async (context, next) =>
+            {
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+                    if (!string.IsNullOrEmpty(emailClaim))
+                    {
+                        ((ClaimsIdentity)context.User.Identity).AddClaim(new Claim(ClaimTypes.Name, emailClaim));
+                    }
+                }
+                await next();
+            });
 
             app.UseStaticFiles();
 

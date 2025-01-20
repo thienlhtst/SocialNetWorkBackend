@@ -40,15 +40,19 @@ namespace UserInfrastructure.Repositories
         {
             var result = await _userDbContext.Users
                             .Include(u => u.Followees)
-                            .Where(u => u.UserName == requestName)
+                            .Include(u => u.Followers)
+                            .Where(u => u.AcountName == requestName)
                             .Select(u => new
                             {
                                 User = u,
-                                Follows = u.Followees.ToList()
+                                Followees = u.Followees.ToList(),
+                                Followers = u.Followers.ToList(),
                             }).FirstOrDefaultAsync();
             if (result==null) return null;
-            if (result.Follows!=null)
-                result.User.Followees = result.Follows;
+            if (result.Followees!=null)
+                result.User.Followees = result.Followees;
+            if (result.Followers!=null)
+                result.User.Followers = result.Followers;
             return result.User;
         }
 

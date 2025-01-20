@@ -79,5 +79,11 @@ namespace UserApplication.Services
             var response = await _userRepository.GetUserToSreach(request);
             return response;
         }
+
+        public async Task<string> GetstringAccountUser(string requestid)
+        {
+            var response = await _baseRepository.GetbyId(requestid);
+            return response.AcountName ?? string.Empty;
+        }
     }
 }

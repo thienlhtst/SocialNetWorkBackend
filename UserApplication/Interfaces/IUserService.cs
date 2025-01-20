@@ -14,6 +14,8 @@ namespace UserApplication.Interfaces
 
         public Task<User?> GetInformationUser(string requestName);
 
+        public Task<string> GetstringAccountUser(string requestid);
+
         public Task<List<User>?> GetListSreachUser(string request);
 
         public Task<User?> UpdateInformationUser(string IdUser, RequestUpdateUserVM request);
