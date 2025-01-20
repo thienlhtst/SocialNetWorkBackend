@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using MassTransit;
@@ -38,11 +40,13 @@ namespace UserPresentation
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddControllers();
-
+            services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+); ;
             services.AddEndpointsApiExplorer();
             services.AddHttpContextAccessor();
             services.AddApplicationServices();
@@ -71,14 +75,15 @@ namespace UserPresentation
             {
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.Host("localhost", "/", h =>
+                    cfg.Host("rabbitmq", "/", h =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        h.Username("admin");
+                        h.Password("admin");
                     });
                     cfg.ConfigureEndpoints(ctx);
                 });
             });
+            services.AddMassTransitHostedService();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options =>
@@ -88,17 +93,27 @@ namespace UserPresentation
                                 ValidateIssuer = true,
                                 ValidateAudience = true,
                                 ValidateLifetime = true,
+                                ValidateIssuerSigningKey = true,
                                 ValidIssuer = Configuration["Jwt:Issuer"],
                                 ValidAudience = Configuration["Jwt:Audience"],
-                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                             };
                             options.Events = new JwtBearerEvents
                             {
-                                OnAuthenticationFailed = context =>
+                                OnTokenValidated = context =>
                                 {
-                                    if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                                    if (claimsIdentity != null)
                                     {
-                                        context.Response.Headers.Add("Token-Expired", "true");
+                                        // Thêm claim tùy chỉnh từ token vào User.Claims
+                                        var jwtToken = context.SecurityToken as JwtSecurityToken;
+                                        if (jwtToken != null)
+                                        {
+                                            foreach (var claim in jwtToken.Claims)
+                                            {
+                                                claimsIdentity.AddClaim(claim);
+                                            }
+                                        }
                                     }
                                     return Task.CompletedTask;
                                 }
@@ -139,6 +154,19 @@ namespace UserPresentation
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.Use(async (context, next) =>
+            {
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+                    if (!string.IsNullOrEmpty(emailClaim))
+                    {
+                        ((ClaimsIdentity)context.User.Identity).AddClaim(new Claim(ClaimTypes.Name, emailClaim));
+                    }
+                }
+                await next();
+            });
 
             app.UseStaticFiles();
 

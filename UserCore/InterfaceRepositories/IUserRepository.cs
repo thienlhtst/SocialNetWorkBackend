@@ -11,7 +11,9 @@ namespace UserCore.InterfaceRepositories
     {
         Task<User?> GetbyUniqueString(string request);
 
-        Task<User?> GetInfoUser(string requestId);
+        public Task<User?> GetbyAccountName(string request);
+
+        Task<User?> GetInfoUser(string requestName);
 
         public Task<List<User>?> GetFollowerOrFolloweeUser(string requestId, string type, bool typePrivate);
 

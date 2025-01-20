@@ -28,18 +28,31 @@ namespace UserInfrastructure.Repositories
             return null;
         }
 
-        public async Task<User?> GetInfoUser(string requestId)
+        public async Task<User?> GetbyAccountName(string request)
+        {
+            var result = await _userDbContext.Users.FirstOrDefaultAsync(x => x.AcountName.Equals(request));
+            if (result !=null)
+                return result;
+            return null;
+        }
+
+        public async Task<User?> GetInfoUser(string requestName)
         {
             var result = await _userDbContext.Users
                             .Include(u => u.Followees)
-                            .Where(u => u.Id == requestId)
+                            .Include(u => u.Followers)
+                            .Where(u => u.AcountName == requestName)
                             .Select(u => new
                             {
                                 User = u,
-                                Follows = u.Followees.ToList()
+                                Followees = u.Followees.ToList(),
+                                Followers = u.Followers.ToList(),
                             }).FirstOrDefaultAsync();
-            if (result.Follows!=null)
-                result.User.Followees = result.Follows;
+            if (result==null) return null;
+            if (result.Followees!=null)
+                result.User.Followees = result.Followees;
+            if (result.Followers!=null)
+                result.User.Followers = result.Followers;
             return result.User;
         }
 

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UserApplication.Interfaces;
 using UserApplication.ViewModel.UserViewModel;
 using UserCore.Entities;
@@ -26,6 +28,16 @@ namespace UserPresentation.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("userinfo/{name}")]
+        public async Task<IActionResult> GetUserInfo(string name)
+        {
+            var username = await _userService.GetstringAccountUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var result = await _userService.GetInformationUser(name);
+            if (username ==name) return Ok(new { type = "private", info = result });
+            return Ok(new { type = "public", info = result });
+        }
+
         [HttpGet("information/{id}")]
         public async Task<IActionResult> GetInformationAccout(string id)
         {
@@ -49,13 +61,6 @@ namespace UserPresentation.Controllers
 
         [HttpPut("changeInfo/{id}")]
         public async Task<IActionResult> ChangeInforAccount(string id, RequestUpdateUserVM request)
-        {
-            var result = await _userService.UpdateInformationUser(id, request);
-            return Ok(result);
-        }
-
-        [HttpPost("{id}")]
-        public async Task<IActionResult> UpdateInformationUser(string id, [FromBody] RequestUpdateUserVM request)
         {
             var result = await _userService.UpdateInformationUser(id, request);
             return Ok(result);

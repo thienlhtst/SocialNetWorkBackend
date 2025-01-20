@@ -15,6 +15,6 @@ namespace NotificationPresentation.Infrastucture
             modelBuilder.Entity<Notification>().HasKey(x => x.Id);
         }
 
-        private DbSet<Notification> notifications { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

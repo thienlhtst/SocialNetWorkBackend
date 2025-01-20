@@ -24,17 +24,11 @@ namespace UserApplication.Services
             _userRepository=userRepository;
         }
 
-        public async Task<IdentityUser> FindAccount(string requeststring)
+        public async Task<User> FindAccount(string requeststring)
         {
             var reponse = await _userRepository.GetbyUniqueString(requeststring);
             if (reponse == null) { return null; }
-            IdentityUser result = new IdentityUser
-            {
-                Id =reponse.Id,
-                UserName = reponse.UserName,
-                Email = reponse.Email,
-            };
-            return result;
+            return reponse;
         }
 
         public async Task<SignInResult> LoginAsync(LoginVM request)

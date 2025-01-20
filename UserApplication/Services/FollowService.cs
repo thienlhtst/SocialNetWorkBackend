@@ -13,12 +13,14 @@ namespace UserApplication.Services
     public class FollowService : IFollowService
     {
         private readonly IFollowRepository _followRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IBaseRepository<Follow> _followBase;
 
-        public FollowService(IFollowRepository followRepository, IBaseRepository<Follow> baseRepository)
+        public FollowService(IFollowRepository followRepository, IBaseRepository<Follow> baseRepository, IUserRepository userRepository)
         {
             _followRepository=followRepository;
             _followBase=baseRepository;
+            _userRepository=userRepository;
         }
 
         //test
@@ -31,13 +33,16 @@ namespace UserApplication.Services
 
         public async Task<int> RequestFollowTo(RequestFollowVM request)
         {
-            var result = await _followRepository.RequestFollowTo(request.Follower, request.Followee);
+            var idfollower = await _userRepository.GetbyAccountName(request.Follower);
+            var result = await _followRepository.RequestFollowTo(idfollower.Id, request.Followee);
             return result;
         }
 
         public async Task<int> ResponseFollowPrivateUser(RequestFollowVM request)
         {
-            var entity = await _followRepository.GetbyID(request.Follower, request.Followee);
+            var idfollower = await _userRepository.GetbyAccountName(request.Follower);
+
+            var entity = await _followRepository.GetbyID(idfollower.Id, request.Followee);
             entity.IsFollowing =true;
             var result = await _followBase.Update(entity);
             if (result != null) { return 1; }
@@ -46,7 +51,16 @@ namespace UserApplication.Services
 
         public async Task<int> RemoveFollowUser(RequestFollowVM request)
         {
-            var result = await _followRepository.RemoveFollowAccount(request.Follower, request.Followee);
+            var idfollower = await _userRepository.GetbyAccountName(request.Follower);
+            var result = await _followRepository.RemoveFollowAccount(idfollower.Id, request.Followee);
+            if (result == 1) { return 1; }
+            return 0;
+        }
+
+        public async Task<int> RemoveFolloweeUser(RequestFollowVM request)
+        {
+            var idfollower = await _userRepository.GetbyAccountName(request.Followee);
+            var result = await _followRepository.RemoveFollowAccount(request.Follower, idfollower.Id);
             if (result == 1) { return 1; }
             return 0;
         }

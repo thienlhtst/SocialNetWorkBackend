@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserApplication.ViewModel.AccountViewModel;
+using UserCore.Entities;
 
 namespace UserApplication.Interfaces
 {
@@ -14,6 +15,6 @@ namespace UserApplication.Interfaces
 
         public Task<SignInResult> LoginAsync(LoginVM request);
 
-        public Task<IdentityUser> FindAccount(string requeststring);
+        public Task<User> FindAccount(string requeststring);
     }
 }

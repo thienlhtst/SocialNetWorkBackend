@@ -20,6 +20,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationPresentation", "NotificationPresentation\NotificationPresentation.csproj", "{5E7B29E2-983C-4B31-9B42-EFD398F5F53E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerViewModel", "ConsumerViewModel\ConsumerViewModel.csproj", "{58DF513D-9A4B-4525-9960-EDCD926C31CD}"
+
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostServices", "PostServices", "{DDBDC7F8-16AD-49F4-B4BF-9740EF11C7BD}"
 EndProject
@@ -30,6 +31,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostApplication", "PostApplication\PostApplication.csproj", "{AADBE02C-F09F-4396-A68E-C3D5F029244F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostResentation", "PostResentation\PostResentation.csproj", "{5EACB6F4-B068-4FE3-A52F-2B4308383C20}"
+
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
