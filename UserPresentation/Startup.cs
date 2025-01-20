@@ -155,7 +155,7 @@ namespace UserPresentation
             });
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
+            app.UseAuthentication();    
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
