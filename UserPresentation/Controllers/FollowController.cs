@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UserApplication.Interfaces;
 using UserApplication.ViewModel.FollowViewModel;
+using UserCore.Entities;
 
 namespace UserPresentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FollowController : ControllerBase
     {
         private readonly IFollowService _followService;
@@ -25,35 +29,56 @@ namespace UserPresentation.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RequestFollowTo([FromBody] RequestFollowVM request)
+        [HttpPost("{follower}")]
+        public async Task<IActionResult> RequestFollowTo(string follower)
         {
-            var result = await _followService.RequestFollowTo(request);
-            await _postNotificationService.SendNotificationFollow(request);
+            var iduser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            RequestFollowVM requestFollow = new RequestFollowVM
+            {
+                Followee = iduser,
+                Follower = follower
+            };
+            var result = await _followService.RequestFollowTo(requestFollow);
+            await _postNotificationService.SendNotificationFollow(requestFollow);
             return Ok(result);
         }
 
-        [HttpPut("{idfollower}")]
-        public async Task<IActionResult> ResponseFollowPrivateUser(string idfollower, [FromQuery] string idfollowee)
+        [HttpPut("{follower}")]
+        public async Task<IActionResult> ResponseFollowPrivateUser(string follower)
         {
+            var iduser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             RequestFollowVM requestFollow = new RequestFollowVM
             {
-                Followee = idfollowee,
-                Follower = idfollower
+                Followee = iduser,
+                Follower = follower
             };
             var result = await _followService.ResponseFollowPrivateUser(requestFollow);
             return Ok(result);
         }
 
-        [HttpDelete("{idfollower}")]
-        public async Task<IActionResult> RemoveFollowUser(string idfollower, [FromQuery] string idfollowee)
+        [HttpDelete("{follower}")]
+        public async Task<IActionResult> RemoveFollowUser(string follower)
         {
+            var iduser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             RequestFollowVM requestFollow = new RequestFollowVM
             {
-                Followee = idfollowee,
-                Follower = idfollower
+                Followee = iduser,
+                Follower = follower
             };
             var result = await _followService.RemoveFollowUser(requestFollow);
+            return Ok(result);
+        }
+
+        [HttpDelete("DeleteFollowee/{followee}")]
+        public async Task<IActionResult> DeleteFollowee(string followee)
+        {
+            var iduser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            RequestFollowVM requestFollow = new RequestFollowVM
+            {
+                Followee = followee,
+                Follower = iduser
+            };
+            var result = await _followService.RemoveFolloweeUser(requestFollow);
             return Ok(result);
         }
     }

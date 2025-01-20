@@ -18,7 +18,7 @@ services:
       context: ./
       dockerfile: UserPresentation\Dockerfile
     ports:
-      - 3333:80
+      - 3334:8080
     networks :
       - SC-mynetwork
     environment:
@@ -27,8 +27,9 @@ services:
       RABBITMQ__USERNAME: admin
       RABBITMQ__PASSWORD: admin
     depends_on:
-      - db-sc
       - rabbitmq
+      - db-sc
+      
       
   notification-service:
     container_name: notification-service
@@ -36,7 +37,7 @@ services:
       context: ./
       dockerfile: NotificationPresentation\Dockerfile
     ports:
-      - 3334:80
+      - 3335:8080
     networks :
       - SC-mynetwork
     environment:
@@ -45,8 +46,9 @@ services:
       RABBITMQ__USERNAME: admin
       RABBITMQ__PASSWORD: admin
     depends_on:
+      
       - db-sc
-      - rabbitmq
+      
    
 
   rabbitmq:
@@ -62,7 +64,9 @@ services:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
-        - SC-mynetwork
+      SC-mynetwork:
+        aliases:
+          - rabbitmq
     
 networks:
   SC-mynetwork:

@@ -17,5 +17,7 @@ namespace UserApplication.Interfaces
         public Task<int> ResponseFollowPrivateUser(RequestFollowVM request);
 
         public Task<int> RemoveFollowUser(RequestFollowVM request);
+
+        public Task<int> RemoveFolloweeUser(RequestFollowVM request);
     }
 }

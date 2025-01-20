@@ -12,7 +12,7 @@ namespace UserApplication.Interfaces
     {
         Task<int> ChangePrivatedAccount(PrivateAccountVM request);
 
-        public Task<User?> GetInformationUser(string IdUser);
+        public Task<User?> GetInformationUser(string requestName);
 
         public Task<List<User>?> GetListSreachUser(string request);
 

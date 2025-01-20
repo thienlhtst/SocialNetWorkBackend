@@ -2,6 +2,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using NotificationPresentation;
 using NotificationPresentation.Consumers;
 using NotificationPresentation.Hubs;
 using NotificationPresentation.Infrastucture;
@@ -30,7 +31,7 @@ builder.Services.AddMassTransit(x =>
     x.AddActivities(asb);
     x.UsingRabbitMq((ctx, cfg) =>
     {
-        cfg.Host("localhost", h =>
+        cfg.Host("rabbitmq", "/", h =>
         {
             h.Username("admin");
             h.Password("admin");
@@ -45,9 +46,22 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<NotificationDbContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+        throw;
+    }
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

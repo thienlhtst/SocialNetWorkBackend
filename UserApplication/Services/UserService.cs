@@ -35,9 +35,9 @@ namespace UserApplication.Services
             return 0;
         }
 
-        public async Task<User?> GetInformationUser(string IdUser)
+        public async Task<User?> GetInformationUser(string requestName)
         {
-            var response = await _userRepository.GetInfoUser(IdUser);
+            var response = await _userRepository.GetInfoUser(requestName);
             return response;
         }
 

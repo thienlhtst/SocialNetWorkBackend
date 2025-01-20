@@ -8,7 +8,6 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 USER root
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -21,6 +20,7 @@ RUN dotnet restore "./UserPresentation/./UserPresentation.csproj"
 COPY . .
 WORKDIR "/src/UserPresentation"
 RUN dotnet build "./UserPresentation.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
