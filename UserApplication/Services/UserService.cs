@@ -15,11 +15,13 @@ namespace UserApplication.Services
     {
         private readonly IBaseRepository<User> _baseRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IStorageService _storageService;
 
-        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository)
+        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IStorageService storageService)
         {
             _baseRepository=baseRepository;
             _userRepository=userRepository;
+            _storageService=storageService;
         }
 
         public async Task<int> ChangePrivatedAccount(PrivateAccountVM request)
@@ -35,10 +37,16 @@ namespace UserApplication.Services
             return 0;
         }
 
-        public async Task<User?> GetInformationUser(string requestName)
+        public async Task<ResponseInformationUserVM?> GetInformationUser(string requestName)
         {
             var response = await _userRepository.GetInfoUser(requestName);
-            return response;
+            response.UrlAvatar = _storageService.GetFileUrl(response.UrlAvatar);
+            return new ResponseInformationUserVM
+            {
+                InfoUser =response
+            ,
+                Type="public"
+            };
         }
 
         public async Task<List<User>> GetAll()
@@ -64,10 +72,21 @@ namespace UserApplication.Services
                 entity.Title = request.Title;
                 entity.Links = request.Links;
                 entity.AccountConfirmed = request.AccountConfirmed;
-                entity.UrlAvatar = request.UrlAvatar;
-                // Không thay đổi `CreateAt` vì đó là ngày tạo ban đầu
-                // Ghi nhận thay đổi trạng thái `Active` nếu cần logic riêng
+
                 entity.Active = entity.Active;  // Giữ
+                var reponse = await _baseRepository.Update(entity);
+                return reponse;
+            }
+            return entity;
+        }
+
+        public async Task<User?> UpdateAvatarUser(string IdUser, RequestUpdateAvatarUserVM request)
+        {
+            var entity = await _baseRepository.GetbyId(IdUser);
+            if (entity != null)
+            {
+                entity.UrlAvatar = entity+"_avatar";
+                await _storageService.SaveFileAsync(request.file.OpenReadStream(), entity.UrlAvatar);
                 var reponse = await _baseRepository.Update(entity);
                 return reponse;
             }

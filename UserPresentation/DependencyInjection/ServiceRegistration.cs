@@ -18,6 +18,8 @@ namespace UserPresentation.DependencyInjection
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IFollowService, FollowService>();
             services.AddTransient<IBaseServices<User>, UserService>();
+            services.AddTransient<IStorageService, FileStorageService>();
+
             services.AddScoped<IPushNotificationService, PushNotificationService>();
         }
     }

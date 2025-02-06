@@ -34,8 +34,14 @@ namespace UserPresentation.Controllers
         {
             var username = await _userService.GetstringAccountUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var result = await _userService.GetInformationUser(name);
-            if (username ==name) return Ok(new { type = "private", info = result });
-            return Ok(new { type = "public", info = result });
+            if (username ==name)
+            {
+                result.Type="private";
+
+                return Ok(result);
+            }
+            result.Type="public";
+            return Ok(result);
         }
 
         [HttpGet("information/{id}")]

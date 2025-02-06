@@ -47,6 +47,8 @@ namespace UserPresentation
             services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 ); ;
+            services.AddSingleton<IWebHostEnvironment>(sp => sp.GetRequiredService<IWebHostEnvironment>());
+
             services.AddEndpointsApiExplorer();
             services.AddHttpContextAccessor();
             services.AddApplicationServices();
@@ -183,7 +185,7 @@ namespace UserPresentation
             });
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();    
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
