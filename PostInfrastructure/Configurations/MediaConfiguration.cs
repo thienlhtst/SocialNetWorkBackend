@@ -15,6 +15,7 @@ namespace PostInfrastructure.Configurations
         {
             builder.ToTable("Media");
             builder.HasKey(x => x.Id);
+            builder.HasOne(x => x.MediaPost).WithMany(x => x.Medias).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

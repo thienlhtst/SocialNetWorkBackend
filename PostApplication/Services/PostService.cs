@@ -1,4 +1,5 @@
 ﻿using PostApplication.Interfaces;
+using PostApplication.ViewModel.MediaViewModel;
 using PostApplication.ViewModel.PostViewModel;
 using PostCore.Entities;
 using PostCore.InterfaceRepositories;
@@ -24,24 +25,38 @@ namespace PostApplication.Services
         public async Task<Posts> Create(CreatePostViewModel request)
         {
             Posts newPost = new Posts() {
-                Id = Guid.NewGuid().ToString(),
                 Content = request.Content,
-                UserId = request.UserId,
-                CreatedAt = DateTime.UtcNow,
+                AccountName = request.AccountName,
+                Privacy = request.Privacy,
+                Medias = request.Medias?.Select(m => new Media
+                {
+                }).ToList() ?? new List<Media>()
             };
             Posts result = await _genericRepository.Create(newPost);
             return result;
         }
 
+        public async Task<List<Posts>> GetListByAccountName(string accountName)
+        {
+            var result = await _postRepository.GetByAccountName(accountName);
+            return result;
+        }
+
+        public async Task<List<Posts>> GetListPostRelatedToAll()
+        {
+            return await _postRepository.GetPostAndMedia();
+        }
+
         public async Task<Posts> Update(UpdatePostViewModel request)
         {
-            Posts check = await _genericRepository.GetbyId(request.Id);
+            Posts check = await _genericRepository.GetById(request.Id);
             if (check == null) {
                 return null;
             }
             check.Content = request.Content;
-            check.UserId = request.UserId;
+            check.AccountName = request.AccountName;
             check.UpdatedAt = DateTime.UtcNow;
+            check.Privacy = request.Privacy;
             Posts result = await _genericRepository.Update(check);
             return result;
         }

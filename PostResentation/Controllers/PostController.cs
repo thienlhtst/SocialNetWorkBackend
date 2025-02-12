@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PostApplication.Interfaces;
 using PostApplication.ViewModel.PostViewModel;
 using PostCore.Entities;
@@ -7,6 +6,8 @@ using PostCore.InterfaceRepositories;
 
 namespace PostResentation.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class PostController : ControllerBase
     {
         private readonly IGenericService<Posts> _genericService;
@@ -18,35 +19,47 @@ namespace PostResentation.Controllers
             _postService = postService;
         }
 
-        [HttpGet("post/getAll")]
+        [HttpGet("getList")]
         public async Task<IActionResult> GetAll() {
             List<Posts> result = await _genericService.GetAll();
             return Ok(result);
         }
 
-        [HttpPost("post/create")]
+        [HttpPost("addNew")]
         public async Task<IActionResult> Create([FromBody] CreatePostViewModel request)
         {
             var result = await _postService.Create(request);
             return Ok(result);
         }
 
-        [HttpPut("post/update")]
-        public async Task<IActionResult> Update([FromBody] UpdatePostViewModel request) {
+        [HttpPut("edit")]
+        public async Task<IActionResult> Update(UpdatePostViewModel request) {
             var result = await _postService.Update(request);
             return Ok(result);
         }
 
-        [HttpDelete("post/delete")]
+        [HttpDelete("remove")]
         public async Task<IActionResult> Delete(string id)
         {
             var result = await _genericService.Delete(id);
             return Ok(result);
         }
 
-        [HttpGet("post/getById{id}")]
+        [HttpGet("getById{id}")]
         public async Task<IActionResult> GetById(string id) {
             var result = await _genericService.GetById(id);
+            return Ok(result);
+        }
+
+        [HttpGet("getByAccountName")]
+        public async Task<IActionResult> SearchByAccount(string accountName) {
+            var result = await _postService.GetListByAccountName(accountName);
+            return Ok(result);
+        }
+
+        [HttpGet("getRelated")]
+        public async Task<IActionResult> GetMeme() {
+            var result = await _postService.GetListPostRelatedToAll();
             return Ok(result);
         }
     }

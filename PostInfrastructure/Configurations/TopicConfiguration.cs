@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace PostInfrastructure.Configurations
 {
-    public class ReactionConfiguration : IEntityTypeConfiguration<Reaction>
+    public class TopicConfiguration : IEntityTypeConfiguration<Topic>
     {
-        public void Configure(EntityTypeBuilder<Reaction> builder)
+        public void Configure(EntityTypeBuilder<Topic> builder)
         {
-            builder.ToTable("Reaction");
-            builder.HasKey(x => new { x.AccountName, x.PostIdOrCommentId });
+            builder.ToTable("Topic");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.Name).IsRequired();
         }
     }
 }

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PostApplication.Interfaces;
 using PostApplication.Services;
@@ -18,9 +18,18 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<PostDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PostDbSC")));
 builder.Services.AddTransient<IGenericRepository<Posts>, GenericRepository<Posts>>();
+builder.Services.AddTransient<IGenericRepository<Media>, GenericRepository<Media>>();
 builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
+builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddTransient<IMediaRepository, MediaRepository>();
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+});
 
 var app = builder.Build();
 

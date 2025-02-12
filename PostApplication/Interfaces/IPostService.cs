@@ -13,5 +13,7 @@ namespace PostApplication.Interfaces
     {
         Task<Posts> Create(CreatePostViewModel request);
         Task<Posts> Update(UpdatePostViewModel request);
+        Task<List<Posts>> GetListByAccountName(string accountName);
+        Task<List<Posts>> GetListPostRelatedToAll();
     }
 }

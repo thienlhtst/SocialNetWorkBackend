@@ -1,18 +1,15 @@
-﻿using PostCore.Enum;
+﻿using PostCore.Entities;
+using PostCore.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PostCore.Entities
+namespace PostApplication.ViewModel.MediaViewModel
 {
-    public class Media
+    public class CreateMediaViewModel
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string PostId { get; set; }
-        public Posts MediaPost { get; set; }
         public string MediaName { get; set; } = string.Empty;
         public MediaType MediaType { get; set; }
         public string Url { get; set; } = string.Empty;

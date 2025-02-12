@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PostCore.Entities
 {
-    public class Reaction
+    public class TopicPost
     {
-        public string AccountName { get; set; } = string.Empty;
-        public string PostIdOrCommentId { get; set; } = string.Empty;
+        public string PostId { get; set; } = string.Empty;
+        public string TopicId { get; set; } = string.Empty ;
     }
 }

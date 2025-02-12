@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <ProjectReference Include="..\PostCore\PostCore.csproj" />
     <ProjectReference Include="..\PostInfrastructure\PostInfrastructure.csproj" />
   </ItemGroup>

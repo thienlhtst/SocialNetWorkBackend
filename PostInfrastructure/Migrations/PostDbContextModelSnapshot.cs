@@ -27,6 +27,10 @@ namespace PostInfrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -40,10 +44,6 @@ namespace PostInfrastructure.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -62,9 +62,12 @@ namespace PostInfrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MediaType")
+                        .HasColumnType("int");
+
                     b.Property<string>("PostId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -75,6 +78,8 @@ namespace PostInfrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PostId");
+
                     b.ToTable("Media", (string)null);
                 });
 
@@ -83,6 +88,10 @@ namespace PostInfrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -90,15 +99,14 @@ namespace PostInfrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Privacy")
+                        .HasColumnType("int");
+
                     b.Property<string>("RepostId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -107,15 +115,31 @@ namespace PostInfrastructure.Migrations
 
             modelBuilder.Entity("PostCore.Entities.Reaction", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("AccountName")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PostIdOrCommentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "PostIdOrCommentId");
+                    b.HasKey("AccountName", "PostIdOrCommentId");
 
                     b.ToTable("Reaction", (string)null);
+                });
+
+            modelBuilder.Entity("PostCore.Entities.Media", b =>
+                {
+                    b.HasOne("PostCore.Entities.Posts", "MediaPost")
+                        .WithMany("Medias")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("MediaPost");
+                });
+
+            modelBuilder.Entity("PostCore.Entities.Posts", b =>
+                {
+                    b.Navigation("Medias");
                 });
 #pragma warning restore 612, 618
         }
