@@ -10,7 +10,7 @@ namespace UserCore.Entities
     public class User : IdentityUser
     {
         public string FullName { get; set; } = string.Empty;
-        public string AcountName { get; set; } = string.Empty;
+        public string AccountName { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;
         public DateTime CreateAt { get; set; } = DateTime.Now;

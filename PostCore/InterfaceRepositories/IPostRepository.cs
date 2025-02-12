@@ -11,6 +11,7 @@ namespace PostCore.InterfaceRepositories
     public interface IPostRepository
     {
         public Task<List<Posts>> GetByAccountName(string accountName);
+
         public Task<List<Posts>> GetPostAndMedia();
     }
 }

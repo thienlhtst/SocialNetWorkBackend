@@ -65,8 +65,11 @@ namespace PostInfrastructure.Migrations
                     b.Property<int>("MediaType")
                         .HasColumnType("int");
 
-                    b.Property<string>("PostId")
+                    b.Property<string>("ParentId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostsId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Url")
@@ -78,7 +81,7 @@ namespace PostInfrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("PostsId");
 
                     b.ToTable("Media", (string)null);
                 });
@@ -128,13 +131,9 @@ namespace PostInfrastructure.Migrations
 
             modelBuilder.Entity("PostCore.Entities.Media", b =>
                 {
-                    b.HasOne("PostCore.Entities.Posts", "MediaPost")
+                    b.HasOne("PostCore.Entities.Posts", null)
                         .WithMany("Medias")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("MediaPost");
+                        .HasForeignKey("PostsId");
                 });
 
             modelBuilder.Entity("PostCore.Entities.Posts", b =>

@@ -9,5 +9,6 @@ namespace PostCore.InterfaceRepositories
 {
     public interface IMediaRepository
     {
+        public Task<List<Media>> GetAllbyParentId(string parentId);
     }
 }

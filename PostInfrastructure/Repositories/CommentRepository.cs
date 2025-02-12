@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PostCore.Entities;
 using PostCore.InterfaceRepositories;
 using System;
 using System.Collections.Generic;
@@ -9,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace PostInfrastructure.Repositories
 {
-    public class MediaRepository : IMediaRepository
+    public class CommentRepository : ICommentRepository
     {
         private readonly PostDbContext _postDbContext;
 
-        public MediaRepository(PostDbContext postDbContext)
+        public CommentRepository(PostDbContext postDbContext)
         {
             _postDbContext = postDbContext;
         }
 
-        public async Task<List<Media>> GetAllbyParentId(string parentId)
+        public async Task<int> CounComment(string id)
         {
-            var result = await _postDbContext.Medias.Where(m => m.ParentId == parentId).ToListAsync();
-            return result;
+            var count = await _postDbContext.Comments.Where(x => x.ParentId.Equals(id)).CountAsync();
+            return count;
         }
     }
 }

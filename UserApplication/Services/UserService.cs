@@ -59,7 +59,7 @@ namespace UserApplication.Services
             if (entity != null)
             {
                 entity.FullName = request.FullName;
-                entity.AcountName = request.AcountName;
+                entity.AccountName = request.AcountName;
                 entity.Email = request.Email;
                 entity.Title = request.Title;
                 entity.Links = request.Links;
@@ -83,7 +83,7 @@ namespace UserApplication.Services
         public async Task<string> GetstringAccountUser(string requestid)
         {
             var response = await _baseRepository.GetbyId(requestid);
-            return response.AcountName ?? string.Empty;
+            return response.AccountName ?? string.Empty;
         }
     }
 }

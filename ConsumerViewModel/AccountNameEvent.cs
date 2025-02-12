@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PostCore.InterfaceRepositories
+namespace ConsumerViewModel
 {
-    public interface ICommentRepository
+    public class AccountNameEvent
     {
-        public Task<int> CounComment(string id);
+        public string AccountName { get; set; }
     }
 }

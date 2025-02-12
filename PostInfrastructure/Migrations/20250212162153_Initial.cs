@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PostInfrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class updatePostService : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,28 +61,28 @@ namespace PostInfrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PostId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ParentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MediaName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MediaType = table.Column<int>(type: "int", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Width = table.Column<double>(type: "float", nullable: false),
-                    Height = table.Column<double>(type: "float", nullable: false)
+                    Height = table.Column<double>(type: "float", nullable: false),
+                    PostsId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Media", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Media_Posts_PostId",
-                        column: x => x.PostId,
+                        name: "FK_Media_Posts_PostsId",
+                        column: x => x.PostsId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Media_PostId",
+                name: "IX_Media_PostsId",
                 table: "Media",
-                column: "PostId");
+                column: "PostsId");
         }
 
         /// <inheritdoc />

@@ -16,6 +16,8 @@ namespace UserInfrastructure.Configurations
             builder.ToTable("User");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.FullName).IsRequired();
+            builder.HasIndex(u => u.AccountName)
+            .IsUnique();
         }
     }
 }
