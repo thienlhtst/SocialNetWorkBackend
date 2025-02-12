@@ -16,6 +16,7 @@ namespace PostInfrastructure
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
             modelBuilder.ApplyConfiguration(new MediaConfiguration());
             modelBuilder.ApplyConfiguration(new ReactionConfiguration());
+            modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
 

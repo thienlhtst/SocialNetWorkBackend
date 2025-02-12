@@ -31,10 +31,17 @@ namespace PostInfrastructure.Repositories
         public async Task<List<Posts>> GetByAccountName(string accountName)
         {
             List<Posts> result = await _postDbContext.Posts
+                .Where(p => p.AccountName.Equals(accountName))
+                .ToListAsync();
+            return result;
+        }
+
+        public async Task<List<Posts>> GetListLikeByAccountName(string accountName)
+        {
+            List<Posts> result = await _postDbContext.Posts
                 .Where(p => p.AccountName.Contains(accountName))
                 .ToListAsync();
             return result;
         }
     }
 }
-    
