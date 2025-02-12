@@ -12,8 +12,8 @@ using PostInfrastructure;
 namespace PostInfrastructure.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20250212162153_Initial")]
-    partial class Initial
+    [Migration("20250212170204_Innitial")]
+    partial class Innitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,7 +58,7 @@ namespace PostInfrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Height")
+                    b.Property<double?>("Height")
                         .HasColumnType("float");
 
                     b.Property<string>("MediaName")
@@ -72,19 +72,14 @@ namespace PostInfrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostsId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Width")
+                    b.Property<double?>("Width")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PostsId");
 
                     b.ToTable("Media", (string)null);
                 });
@@ -130,18 +125,6 @@ namespace PostInfrastructure.Migrations
                     b.HasKey("AccountName", "PostIdOrCommentId");
 
                     b.ToTable("Reaction", (string)null);
-                });
-
-            modelBuilder.Entity("PostCore.Entities.Media", b =>
-                {
-                    b.HasOne("PostCore.Entities.Posts", null)
-                        .WithMany("Medias")
-                        .HasForeignKey("PostsId");
-                });
-
-            modelBuilder.Entity("PostCore.Entities.Posts", b =>
-                {
-                    b.Navigation("Medias");
                 });
 #pragma warning restore 612, 618
         }

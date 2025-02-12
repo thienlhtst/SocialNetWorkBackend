@@ -12,8 +12,8 @@ using PostInfrastructure;
 namespace PostInfrastructure.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20250212164138_SeedData")]
-    partial class SeedData
+    [Migration("20250212170236_Dataseed")]
+    partial class Dataseed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,9 +58,9 @@ namespace PostInfrastructure.Migrations
                             Id = "4752c4fe-1546-4c01-a46f-e9fcab755389",
                             AccountName = "tienminh",
                             Content = "Test Du lieu Comment xiu di ban oi",
-                            CreatedAt = new DateTime(2025, 2, 12, 23, 41, 36, 988, DateTimeKind.Local).AddTicks(3583),
+                            CreatedAt = new DateTime(2025, 2, 13, 0, 2, 35, 515, DateTimeKind.Local).AddTicks(7135),
                             ParentId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
-                            UpdatedAt = new DateTime(2025, 2, 12, 23, 41, 36, 988, DateTimeKind.Local).AddTicks(4375)
+                            UpdatedAt = new DateTime(2025, 2, 13, 0, 2, 35, 515, DateTimeKind.Local).AddTicks(7346)
                         });
                 });
 
@@ -83,9 +83,6 @@ namespace PostInfrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostsId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -94,8 +91,6 @@ namespace PostInfrastructure.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PostsId");
 
                     b.ToTable("Media", (string)null);
 
@@ -145,9 +140,9 @@ namespace PostInfrastructure.Migrations
                             Id = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
                             AccountName = "thienzn",
                             Content = "Test Du lieu xiu di ban oi",
-                            CreatedAt = new DateTime(2025, 2, 12, 23, 41, 36, 985, DateTimeKind.Local).AddTicks(2597),
+                            CreatedAt = new DateTime(2025, 2, 13, 0, 2, 35, 514, DateTimeKind.Local).AddTicks(6913),
                             Privacy = 1,
-                            UpdatedAt = new DateTime(2025, 2, 12, 23, 41, 36, 985, DateTimeKind.Local).AddTicks(3441)
+                            UpdatedAt = new DateTime(2025, 2, 13, 0, 2, 35, 514, DateTimeKind.Local).AddTicks(7175)
                         });
                 });
 
@@ -162,18 +157,6 @@ namespace PostInfrastructure.Migrations
                     b.HasKey("AccountName", "PostIdOrCommentId");
 
                     b.ToTable("Reaction", (string)null);
-                });
-
-            modelBuilder.Entity("PostCore.Entities.Media", b =>
-                {
-                    b.HasOne("PostCore.Entities.Posts", null)
-                        .WithMany("Medias")
-                        .HasForeignKey("PostsId");
-                });
-
-            modelBuilder.Entity("PostCore.Entities.Posts", b =>
-                {
-                    b.Navigation("Medias");
                 });
 #pragma warning restore 612, 618
         }

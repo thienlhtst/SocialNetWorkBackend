@@ -23,7 +23,6 @@ namespace PostInfrastructure.Repositories
         public async Task<List<Posts>> GetPostAndMedia()
         {
             List<Posts> result = await _postDbContext.Posts
-                .Include(p => p.Medias)
                 .ToListAsync();
             return result;
         }

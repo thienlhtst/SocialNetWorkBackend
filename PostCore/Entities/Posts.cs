@@ -17,6 +17,5 @@ namespace PostCore.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public Privacy Privacy { get; set; } = Privacy.Public;
         public string? RepostId { get; set; } = string.Empty;
-        public ICollection<Media> Medias { get; set; }
     }
 }

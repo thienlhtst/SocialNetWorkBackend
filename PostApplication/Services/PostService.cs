@@ -35,9 +35,6 @@ namespace PostApplication.Services
                 Content = request.Content,
                 AccountName = request.AccountName,
                 Privacy = request.Privacy,
-                Medias = request.Medias?.Select(m => new Media
-                {
-                }).ToList() ?? new List<Media>()
             };
             Posts result = await _genericRepository.Create(newPost);
             return result;
