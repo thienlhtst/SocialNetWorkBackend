@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PostApplication.Interfaces;
 using PostApplication.Services;
@@ -28,6 +29,27 @@ builder.Services.AddTransient<IReactionRepository, ReactionRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentRepository>();
 builder.Services.AddTransient<IMediaRepository, MediaRepository>();
 
+//
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.SetInMemorySagaRepositoryProvider();
+    var asb = typeof(Program).Assembly;
+    x.AddConsumers(asb);
+    x.AddSagaStateMachines(asb);
+    x.AddSagas(asb);
+    x.AddActivities(asb);
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(ctx);
+    });
+});
+////
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 ); ;

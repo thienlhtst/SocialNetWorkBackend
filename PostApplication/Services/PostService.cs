@@ -54,7 +54,6 @@ namespace PostApplication.Services
                     IsLiked = await _reactionRepository.FindUserReaction(x.Id, accountName),
                     Count = await _reactionRepository.CountReaction(x.Id)
                 };
-                // Không để danh sách null
 
                 var countComment = await _commentRepository.CounComment(x.Id); // Gọi trước để tránh gọi lại
                 var media = await _mediaRepository.GetAllbyParentId(x.Id);

@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using ConsumerViewModel;
+using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,13 @@ namespace UserApplication.Services
     {
         private readonly IBaseRepository<User> _baseRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IRequestClient<AccountNameEvent> _requestClient;
 
-        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository)
+        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IRequestClient<AccountNameEvent> requestClient)
         {
             _baseRepository=baseRepository;
             _userRepository=userRepository;
+            _requestClient=requestClient;
         }
 
         public async Task<int> ChangePrivatedAccount(PrivateAccountVM request)
@@ -38,6 +42,8 @@ namespace UserApplication.Services
         public async Task<User?> GetInformationUser(string requestName)
         {
             var response = await _userRepository.GetInfoUser(requestName);
+            var result = await _requestClient.GetResponse<PostViewModelEvent>(requestName);
+            Console.WriteLine(result.Message.Id);
             return response;
         }
 

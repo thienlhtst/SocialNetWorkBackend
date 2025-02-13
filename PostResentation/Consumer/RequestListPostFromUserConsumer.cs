@@ -22,7 +22,7 @@ namespace PostResentation.Consumer
         public async Task Consume(ConsumeContext<AccountNameEvent> context)
         {
             var result = await _postService.GetListByAccountName(context.Message.AccountName);
-            await context.RespondAsync(result);
+            await context.RespondAsync<PostViewModelEvent>(result);
         }
     }
 }
