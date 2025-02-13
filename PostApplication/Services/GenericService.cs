@@ -19,7 +19,7 @@ namespace PostApplication.Services
 
         public async Task<int> Delete(string id)
         {
-            var check = await _repository.GetbyId(id);
+            var check = await _repository.GetById(id);
             if (check == null) {
                 return -1;
             }
@@ -34,7 +34,7 @@ namespace PostApplication.Services
 
         public async Task<T> GetById(string id)
         {
-            var result = await _repository.GetbyId(id);
+            var result = await _repository.GetById(id);
             if (result == null) { 
                 return null;
             }

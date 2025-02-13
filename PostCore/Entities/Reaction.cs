@@ -8,7 +8,7 @@ namespace PostCore.Entities
 {
     public class Reaction
     {
-        public string UserId { get; set; } = string.Empty;
+        public string AccountName { get; set; } = string.Empty;
         public string PostIdOrCommentId { get; set; } = string.Empty;
     }
 }

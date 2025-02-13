@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using ConsumerViewModel;
+using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +17,16 @@ namespace UserApplication.Services
     {
         private readonly IBaseRepository<User> _baseRepository;
         private readonly IUserRepository _userRepository;
+      private readonly IRequestClient<AccountNameEvent> _requestClient;
         private readonly IStorageService _storageService;
 
-        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IStorageService storageService)
+        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IStorageService storageService, IRequestClient<AccountNameEvent> requestClient)
         {
             _baseRepository=baseRepository;
             _userRepository=userRepository;
             _storageService=storageService;
-        }
+             _requestClient=requestClient;
+
 
         public async Task<int> ChangePrivatedAccount(PrivateAccountVM request)
         {
@@ -47,6 +51,9 @@ namespace UserApplication.Services
             ,
                 Type="public"
             };
+            var result = await _requestClient.GetResponse<PostViewModelEvent>(requestName);
+            Console.WriteLine(result.Message.Id);
+            return response;
         }
 
         public async Task<List<User>> GetAll()
@@ -67,7 +74,7 @@ namespace UserApplication.Services
             if (entity != null)
             {
                 entity.FullName = request.FullName;
-                entity.AcountName = request.AcountName;
+                entity.AccountName = request.AcountName;
                 entity.Email = request.Email;
                 entity.Title = request.Title;
                 entity.Links = request.Links;
@@ -102,7 +109,7 @@ namespace UserApplication.Services
         public async Task<string> GetstringAccountUser(string requestid)
         {
             var response = await _baseRepository.GetbyId(requestid);
-            return response.AcountName ?? string.Empty;
+            return response.AccountName ?? string.Empty;
         }
     }
 }

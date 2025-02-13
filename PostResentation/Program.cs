@@ -1,3 +1,4 @@
+﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PostApplication.Interfaces;
@@ -18,9 +19,40 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<PostDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PostDbSC")));
 builder.Services.AddTransient<IGenericRepository<Posts>, GenericRepository<Posts>>();
+builder.Services.AddTransient<IGenericRepository<Media>, GenericRepository<Media>>();
 builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
+builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddTransient<IReactionRepository, ReactionRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
+builder.Services.AddTransient<IMediaRepository, MediaRepository>();
+
+//
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.SetInMemorySagaRepositoryProvider();
+    var asb = typeof(Program).Assembly;
+    x.AddConsumers(asb);
+    x.AddSagaStateMachines(asb);
+    x.AddSagas(asb);
+    x.AddActivities(asb);
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(ctx);
+    });
+});
+////
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+); ;
 
 var app = builder.Build();
 

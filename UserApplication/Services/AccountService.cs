@@ -43,7 +43,7 @@ namespace UserApplication.Services
                 UserName = request.UserName,
                 Email = request.Email,
                 FullName = request.FullName,
-                AcountName =request.AccountName
+                AccountName =request.AccountName
             };
 
             return await _userManager.CreateAsync(user, request.Password);

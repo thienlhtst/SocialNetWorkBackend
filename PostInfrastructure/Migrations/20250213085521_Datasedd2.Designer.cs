@@ -12,8 +12,8 @@ using PostInfrastructure;
 namespace PostInfrastructure.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20250120154703_UpdatePostServiceDB")]
-    partial class UpdatePostServiceDB
+    [Migration("20250213085521_Datasedd2")]
+    partial class Datasedd2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,10 @@ namespace PostInfrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -44,13 +48,20 @@ namespace PostInfrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Comment", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4752c4fe-1546-4c01-a46f-e9fcab755389",
+                            AccountName = "tienminh",
+                            Content = "Test Du lieu Comment xiu di ban oi",
+                            CreatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 194, DateTimeKind.Local).AddTicks(1346),
+                            ParentId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
+                            UpdatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 194, DateTimeKind.Local).AddTicks(1740)
+                        });
                 });
 
             modelBuilder.Entity("PostCore.Entities.Media", b =>
@@ -58,14 +69,17 @@ namespace PostInfrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Height")
+                    b.Property<double?>("Height")
                         .HasColumnType("float");
 
                     b.Property<string>("MediaName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostId")
+                    b.Property<int>("MediaType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ParentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -73,18 +87,34 @@ namespace PostInfrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Width")
+                    b.Property<double?>("Width")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.ToTable("Media", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4758c4fe-1546-4c01-a46f-e9fcab755389",
+                            Height = 0.0,
+                            MediaName = "testdulieu",
+                            MediaType = 0,
+                            ParentId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
+                            Url = "/test",
+                            Width = 0.0
+                        });
                 });
 
             modelBuilder.Entity("PostCore.Entities.Posts", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -93,30 +123,40 @@ namespace PostInfrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Privacy")
+                        .HasColumnType("int");
+
                     b.Property<string>("RepostId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Posts", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
+                            AccountName = "thienzn",
+                            Content = "Test Du lieu xiu di ban oi",
+                            CreatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 191, DateTimeKind.Local).AddTicks(9697),
+                            Privacy = 1,
+                            UpdatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 192, DateTimeKind.Local).AddTicks(265)
+                        });
                 });
 
             modelBuilder.Entity("PostCore.Entities.Reaction", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("AccountName")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PostIdOrCommentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "PostIdOrCommentId");
+                    b.HasKey("AccountName", "PostIdOrCommentId");
 
                     b.ToTable("Reaction", (string)null);
                 });

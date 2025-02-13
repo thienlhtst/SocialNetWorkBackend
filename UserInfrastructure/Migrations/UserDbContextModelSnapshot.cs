@@ -187,12 +187,12 @@ namespace UserInfrastructure.Migrations
                     b.Property<bool>("AccountConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("AccountPrivated")
                         .HasColumnType("bit");
-
-                    b.Property<string>("AcountName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -262,6 +262,9 @@ namespace UserInfrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountName")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");

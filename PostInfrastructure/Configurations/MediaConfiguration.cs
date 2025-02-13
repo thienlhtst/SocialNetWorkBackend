@@ -15,6 +15,7 @@ namespace PostInfrastructure.Configurations
         {
             builder.ToTable("Media");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.ParentId).IsRequired();
         }
     }
 }

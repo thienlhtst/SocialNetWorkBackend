@@ -14,7 +14,7 @@ namespace PostInfrastructure.Configurations
         public void Configure(EntityTypeBuilder<Reaction> builder)
         {
             builder.ToTable("Reaction");
-            builder.HasKey(x => new { x.UserId, x.PostIdOrCommentId });
+            builder.HasKey(x => new { x.AccountName, x.PostIdOrCommentId });
         }
     }
 }

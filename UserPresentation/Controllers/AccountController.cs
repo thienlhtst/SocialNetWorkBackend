@@ -61,7 +61,7 @@ namespace UserPresentation.Controllers
         {
             var claims = new[]
             {
-            new Claim(ClaimTypes.Name, user.AcountName),
+            new Claim(ClaimTypes.Name, user.AccountName),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
              new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email, user.Email),

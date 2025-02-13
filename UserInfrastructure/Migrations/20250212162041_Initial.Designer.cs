@@ -12,8 +12,8 @@ using UserInfrastructure;
 namespace UserInfrastructure.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20250109084042_Changeuser")]
-    partial class Changeuser
+    [Migration("20250212162041_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,12 +190,12 @@ namespace UserInfrastructure.Migrations
                     b.Property<bool>("AccountConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("AccountPrivated")
                         .HasColumnType("bit");
-
-                    b.Property<string>("AcountName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -265,6 +265,9 @@ namespace UserInfrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountName")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");

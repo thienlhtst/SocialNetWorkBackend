@@ -17,7 +17,7 @@ namespace PostInfrastructure.Repositories
         }
         public async Task<T> Create(T entity)
         {
-            var result = _postDbContext.Set<T>().Add(entity);
+            var result = await _postDbContext.Set<T>().AddAsync(entity);
             await _postDbContext.SaveChangesAsync();
             return result.Entity;
         }
@@ -46,7 +46,7 @@ namespace PostInfrastructure.Repositories
             return result;
         }
 
-        public async Task<T> GetbyId(string id)
+        public async Task<T> GetById(string id)
         {
             var result = await _postDbContext.Set<T>().FindAsync(id);
             return result;

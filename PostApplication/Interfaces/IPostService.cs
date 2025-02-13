@@ -12,6 +12,11 @@ namespace PostApplication.Interfaces
     public interface IPostService
     {
         Task<Posts> Create(CreatePostViewModel request);
+
         Task<Posts> Update(UpdatePostViewModel request);
+
+        Task<List<PostViewModel>> GetListByAccountName(string accountName);
+
+        Task<List<Posts>> GetListPostRelatedToAll();
     }
 }

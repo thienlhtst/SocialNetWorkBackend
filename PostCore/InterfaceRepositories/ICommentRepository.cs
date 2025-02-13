@@ -8,5 +8,6 @@ namespace PostCore.InterfaceRepositories
 {
     public interface ICommentRepository
     {
+        public Task<int> CounComment(string id);
     }
 }

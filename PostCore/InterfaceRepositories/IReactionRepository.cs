@@ -8,5 +8,8 @@ namespace PostCore.InterfaceRepositories
 {
     public interface IReactionRepository
     {
+        public Task<int> CountReaction(string id);
+
+        public Task<bool> FindUserReaction(string id, string AccountName);
     }
 }

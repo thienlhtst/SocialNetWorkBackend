@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using ConsumerViewModel;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -75,12 +76,20 @@ namespace UserPresentation
 
             services.AddMassTransit(x =>
             {
+                x.SetKebabCaseEndpointNameFormatter();
+                x.SetInMemorySagaRepositoryProvider();
+                var asb = typeof(Program).Assembly;
+                x.AddConsumers(asb);
+                x.AddSagaStateMachines(asb);
+                x.AddSagas(asb);
+                x.AddActivities(asb);
+                x.AddRequestClient<AccountNameEvent>();
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.Host("rabbitmq", "/", h =>
+                    cfg.Host("localhost", "/", h =>
                     {
-                        h.Username("admin");
-                        h.Password("admin");
+                        h.Username("guest");
+                        h.Password("guest");
                     });
                     cfg.ConfigureEndpoints(ctx);
                 });

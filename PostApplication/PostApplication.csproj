@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.3.4" />
+  </ItemGroup>
+
+    <ItemGroup>
+    <ProjectReference Include="..\ConsumerViewModel\ConsumerViewModel.csproj" />
     <ProjectReference Include="..\PostCore\PostCore.csproj" />
     <ProjectReference Include="..\PostInfrastructure\PostInfrastructure.csproj" />
   </ItemGroup>

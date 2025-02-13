@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PostCore.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace PostCore.InterfaceRepositories
 {
     public interface IMediaRepository
     {
-
+        public Task<List<Media>> GetAllbyParentId(string parentId);
     }
 }
