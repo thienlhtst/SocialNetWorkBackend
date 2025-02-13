@@ -32,7 +32,7 @@ namespace PostApplication.ViewModel.PostViewModel
         public UserPosts? User { get; set; }
         public string Content { get; set; }
         public string TimePost { get; set; }
-        public List<Media> Media { get; set; }
+        public List<Media>? Media { get; set; }
         public LikeViewModel Like { get; set; }
         public int CountComment { get; set; }
         public int CountRetweet { get; set; }

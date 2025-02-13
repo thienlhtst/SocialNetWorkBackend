@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PostInfrastructure.Repositories
 {
@@ -20,8 +21,10 @@ namespace PostInfrastructure.Repositories
 
         public async Task<List<Media>> GetAllbyParentId(string parentId)
         {
-            var result = await _postDbContext.Medias.Where(m => m.ParentId == parentId).ToListAsync();
-            return result;
+            var data = _postDbContext.Medias.Where(m => m.ParentId.Equals(parentId));
+
+            if (!data.Any()) return new List<Media>();
+            return await data.ToListAsync();
         }
     }
 }

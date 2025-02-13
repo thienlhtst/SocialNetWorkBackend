@@ -19,7 +19,7 @@ namespace PostInfrastructure
 
                 );
             modelbuilder.Entity<Media>().HasData(
-                new Media() { Id= "4758c4fe-1546-4c01-a46f-e9fcab755389", ParentId="4aa068ad-f48a-42c0-ad99-de7b5e8ad15b", MediaName="testdulieu", Height=null, Width=null, Url="/test", MediaType =MediaType.picture }
+                new Media() { Id= "4758c4fe-1546-4c01-a46f-e9fcab755389", ParentId="4aa068ad-f48a-42c0-ad99-de7b5e8ad15b", MediaName="testdulieu", Height=0, Width=0, Url="/test", MediaType =MediaType.picture }
                 );
             modelbuilder.Entity<Comment>().HasData(
                new Comment() { Id= "4752c4fe-1546-4c01-a46f-e9fcab755389", ParentId="4aa068ad-f48a-42c0-ad99-de7b5e8ad15b", Content="Test Du lieu Comment xiu di ban oi", AccountName="tienminh", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now }

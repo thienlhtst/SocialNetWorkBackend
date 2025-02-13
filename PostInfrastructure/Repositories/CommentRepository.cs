@@ -19,7 +19,10 @@ namespace PostInfrastructure.Repositories
 
         public async Task<int> CounComment(string id)
         {
-            var count = await _postDbContext.Comments.Where(x => x.ParentId.Equals(id)).CountAsync();
+            var count = await _postDbContext.Comments
+     .Where(x => x.ParentId == id)
+     .CountAsync(); // Trả về số lượng trực tiếp từ SQL Server
+
             return count;
         }
     }

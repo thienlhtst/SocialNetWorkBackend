@@ -24,12 +24,13 @@ builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddTransient<IReactionRepository, ReactionRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
 builder.Services.AddTransient<IMediaRepository, MediaRepository>();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-});
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+); ;
 
 var app = builder.Build();
 

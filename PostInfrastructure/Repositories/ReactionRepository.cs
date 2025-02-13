@@ -20,6 +20,7 @@ namespace PostInfrastructure.Repositories
         public async Task<int> CountReaction(string id)
         {
             var count = await _postDbContext.Reactions.Where(x => x.PostIdOrCommentId.Equals(id)).CountAsync();
+
             return count;
         }
 
