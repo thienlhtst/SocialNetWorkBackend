@@ -11,7 +11,7 @@ namespace ConsumerViewModel
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string ParentId { get; set; }
         public string MediaName { get; set; } = string.Empty;
-        public bool MediaType { get; set; }
+        public int MediaType { get; set; }
         public string Url { get; set; } = string.Empty;
         public double? Width { get; set; }
         public double? Height { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsumerViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace UserApplication.ViewModel.UserViewModel
     {
         public string Type { get; set; }
         public User InfoUser { get; set; }
+        public List<PostViewModelEvent> PostViewModelEvent { get; set; }
     }
 }

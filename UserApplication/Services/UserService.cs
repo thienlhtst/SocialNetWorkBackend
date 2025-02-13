@@ -17,7 +17,7 @@ namespace UserApplication.Services
     {
         private readonly IBaseRepository<User> _baseRepository;
         private readonly IUserRepository _userRepository;
-      private readonly IRequestClient<AccountNameEvent> _requestClient;
+        private readonly IRequestClient<AccountNameEvent> _requestClient;
         private readonly IStorageService _storageService;
 
         public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IStorageService storageService, IRequestClient<AccountNameEvent> requestClient)
@@ -25,8 +25,8 @@ namespace UserApplication.Services
             _baseRepository=baseRepository;
             _userRepository=userRepository;
             _storageService=storageService;
-             _requestClient=requestClient;
-
+            _requestClient=requestClient;
+        }
 
         public async Task<int> ChangePrivatedAccount(PrivateAccountVM request)
         {
@@ -45,15 +45,15 @@ namespace UserApplication.Services
         {
             var response = await _userRepository.GetInfoUser(requestName);
             response.UrlAvatar = _storageService.GetFileUrl(response.UrlAvatar);
+
+            var result1 = await _requestClient.GetResponse<ResponseListPostViewModel>(new AccountNameEvent { AccountName=requestName });
             return new ResponseInformationUserVM
             {
                 InfoUser =response
             ,
-                Type="public"
+                Type="public",
+                PostViewModelEvent= result1.Message.resultofrespone,
             };
-            var result = await _requestClient.GetResponse<PostViewModelEvent>(requestName);
-            Console.WriteLine(result.Message.Id);
-            return response;
         }
 
         public async Task<List<User>> GetAll()
