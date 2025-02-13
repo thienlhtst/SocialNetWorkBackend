@@ -33,8 +33,8 @@ namespace UserApplication.Services
 
         public async Task<int> RequestFollowTo(RequestFollowVM request)
         {
-            var idfollower = await _userRepository.GetbyAccountName(request.Follower);
-            var result = await _followRepository.RequestFollowTo(idfollower.Id, request.Followee);
+            var idfollowee = await _userRepository.GetbyAccountName(request.Followee);
+            var result = await _followRepository.RequestFollowTo(request.Follower, idfollowee.Id);
             return result;
         }
 

@@ -29,14 +29,14 @@ namespace UserPresentation.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{follower}")]
-        public async Task<IActionResult> RequestFollowTo(string follower)
+        [HttpPost("{followee}")]
+        public async Task<IActionResult> RequestFollowTo(string followee)
         {
             var iduser = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             RequestFollowVM requestFollow = new RequestFollowVM
             {
-                Followee = iduser,
-                Follower = follower
+                Follower = iduser,
+                Followee = followee
             };
             var result = await _followService.RequestFollowTo(requestFollow);
             await _postNotificationService.SendNotificationFollow(requestFollow);
