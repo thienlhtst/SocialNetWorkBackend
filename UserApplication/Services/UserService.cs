@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using ConsumerViewModel;
+using ConsumerViewModel.UserToComment;
 using MassTransit;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,23 @@ namespace UserApplication.Services
             _requestClient=requestClient;
         }
 
+        public async Task<UserCommentEvent> getUsercommentbyAccountName(string accountName)
+        {
+            var result = await _userRepository.GetbyAccountName(accountName);
+
+            if (result == null) { return new UserCommentEvent(); }
+            var response = new UserCommentEvent
+            {
+                Id =result.Id,
+                FullName = result.FullName,
+                AccountName = result.AccountName,
+                Title = result.Title,
+                Avatar = _storageService.GetFileUrl(result.UrlAvatar),
+                Followers = await _userRepository.CountFolloweeorFollower(accountName, true),
+            };
+            return response;
+        }
+
         public async Task<int> ChangePrivatedAccount(PrivateAccountVM request)
         {
             var response = await _baseRepository.GetbyId(request.Id);
@@ -45,14 +63,32 @@ namespace UserApplication.Services
         {
             var response = await _userRepository.GetInfoUser(requestName);
             response.UrlAvatar = _storageService.GetFileUrl(response.UrlAvatar);
+            ResponseListPostViewModel? postViewModelEvent = null;
 
-            var result1 = await _requestClient.GetResponse<ResponseListPostViewModel>(new AccountNameEvent { AccountName=requestName });
+            try
+            {
+                var result1 = await _requestClient.GetResponse<ResponseListPostViewModel>(
+                    new AccountNameEvent { AccountName = requestName });
+
+                postViewModelEvent = new ResponseListPostViewModel
+                {
+                    resultofrespone= result1.Message.resultofrespone
+                };
+            }
+            catch (RequestTimeoutException ex)
+            {
+                Console.WriteLine($"Service 2 không phản hồi: {ex.Message}");
+                postViewModelEvent = new ResponseListPostViewModel
+                {
+                    resultofrespone= new List<PostViewModelEvent>() // Trả về danh sách rỗng thay vì lỗi
+                };
+            }
             return new ResponseInformationUserVM
             {
                 InfoUser =response
             ,
                 Type="public",
-                PostViewModelEvent= result1.Message.resultofrespone,
+                PostViewModelEvent= postViewModelEvent.resultofrespone,
             };
         }
 
@@ -109,7 +145,7 @@ namespace UserApplication.Services
         public async Task<string> GetstringAccountUser(string requestid)
         {
             var response = await _baseRepository.GetbyId(requestid);
-            return response.AccountName ?? string.Empty;
+            return response.AccountName ??"";
         }
     }
 }

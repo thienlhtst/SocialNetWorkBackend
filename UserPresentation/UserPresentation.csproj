@@ -25,4 +25,8 @@
     <ProjectReference Include="..\UserApplication\UserApplication.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\user-avatar\" />
+  </ItemGroup>
+
 </Project>

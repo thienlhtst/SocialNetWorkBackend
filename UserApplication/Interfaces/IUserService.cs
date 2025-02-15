@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsumerViewModel.UserToComment;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace UserApplication.Interfaces
         public Task<ResponseInformationUserVM?> GetInformationUser(string requestName);
 
         public Task<string> GetstringAccountUser(string requestid);
+
+        public Task<UserCommentEvent> getUsercommentbyAccountName(string accountName);
 
         public Task<List<User>?> GetListSreachUser(string request);
 

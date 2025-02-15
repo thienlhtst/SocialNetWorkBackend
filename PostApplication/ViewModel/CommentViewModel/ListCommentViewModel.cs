@@ -9,7 +9,7 @@ namespace PostApplication.ViewModel.CommentViewModel
 {
     public class UserComment
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string AccountName { get; set; }
         public string FullName { get; set; }
         public string Title { get; set; }

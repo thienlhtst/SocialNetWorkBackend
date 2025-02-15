@@ -21,6 +21,7 @@ namespace PostResentation.Consumer
 
         public async Task Consume(ConsumeContext<AccountNameEvent> context)
         {
+            Console.WriteLine(context.Message.AccountName);
             var result = await _postService.GetListByAccountName(context.Message.AccountName);
             List<PostViewModelEvent> rs = result.Select(post => new PostViewModelEvent
             {

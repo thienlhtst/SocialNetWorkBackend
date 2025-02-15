@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PostApplication.CommunicateServices;
 using PostApplication.Interfaces;
 using PostApplication.Services;
 using PostCore.Entities;
@@ -24,6 +25,9 @@ builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
 builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IMediaService, MediaService>();
+builder.Services.AddTransient<IPostUserServices, PostUserServices>();
+builder.Services.AddTransient<ICommentService, CommentServices>();
+
 builder.Services.AddTransient<IPostRepository, PostRepository>();
 builder.Services.AddTransient<IReactionRepository, ReactionRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentRepository>();
