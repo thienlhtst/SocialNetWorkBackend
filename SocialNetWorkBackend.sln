@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostInfrastructure", "PostI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostApplication", "PostApplication\PostApplication.csproj", "{AADBE02C-F09F-4396-A68E-C3D5F029244F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostResentation", "PostResentation\PostResentation.csproj", "{5EACB6F4-B068-4FE3-A52F-2B4308383C20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostPresentation", "PostResentation\PostPresentation.csproj", "{5EACB6F4-B068-4FE3-A52F-2B4308383C20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

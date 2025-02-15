@@ -24,6 +24,8 @@ builder.Services.AddTransient<IGenericRepository<Media>, GenericRepository<Media
 builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
 builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IReactionService, ReactionService>();
+
 builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddTransient<IPostUserServices, PostUserServices>();
 builder.Services.AddTransient<ICommentService, CommentServices>();
