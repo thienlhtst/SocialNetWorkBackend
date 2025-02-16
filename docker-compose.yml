@@ -29,7 +29,23 @@ services:
     depends_on:
       - rabbitmq
       - db-sc
-      
+  post-service:
+    container_name: post-service
+    build:
+      context: ./
+      dockerfile: PostPresentation\Dockerfile
+    ports:
+      - 3334:8080
+    networks :
+      - SC-mynetwork
+    environment:
+      ASPNETCORE_ENVIRONMENT : Staging
+      RABBITMQ__HOST: rabbitmq
+      RABBITMQ__USERNAME: admin
+      RABBITMQ__PASSWORD: admin
+    depends_on:
+      - rabbitmq
+      - db-sc 
       
   notification-service:
     container_name: notification-service
@@ -46,7 +62,7 @@ services:
       RABBITMQ__USERNAME: admin
       RABBITMQ__PASSWORD: admin
     depends_on:
-      
+      - rabbitmq
       - db-sc
       
    

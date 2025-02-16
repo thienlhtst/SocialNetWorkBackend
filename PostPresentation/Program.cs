@@ -21,6 +21,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PostDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PostDbSC")));
 builder.Services.AddTransient<IGenericRepository<Posts>, GenericRepository<Posts>>();
 builder.Services.AddTransient<IGenericRepository<Media>, GenericRepository<Media>>();
+builder.Services.AddTransient<IGenericRepository<Comment>, GenericRepository<Comment>>();
+
 builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
 builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();

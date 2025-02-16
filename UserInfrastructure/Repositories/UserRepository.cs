@@ -80,6 +80,7 @@ namespace UserInfrastructure.Repositories
         public async Task<List<User>?> GetUserToSreach(string request)
         {
             var result = await _userDbContext.Users
+                            .Include(u => u.Followers)
                            .Where(u => u.FullName.Contains(request) || u.AccountName.Contains(request))
                            .ToListAsync();
             return result;

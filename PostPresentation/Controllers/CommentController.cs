@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PostApplication.Interfaces;
 
-namespace PostResentation.Controllers
+namespace PostPresentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

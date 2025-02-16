@@ -4,7 +4,7 @@ using PostApplication.Interfaces;
 using PostApplication.ViewModel.MediaViewModel;
 using PostCore.Entities;
 
-namespace PostResentation.Controllers
+namespace PostPresentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
