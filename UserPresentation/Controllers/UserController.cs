@@ -54,7 +54,7 @@ namespace UserPresentation.Controllers
         [HttpGet("sreachUser/{requestString}")]
         public async Task<IActionResult> GetListSreachUser(string requestString)
         {
-            var result = await _userService.GetInformationUser(requestString);
+            var result = await _userService.GetListSreachUser(requestString);
             return Ok(result);
         }
 

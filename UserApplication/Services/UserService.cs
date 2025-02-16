@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using ConsumerViewModel;
+using ConsumerViewModel.UserToComment;
 using MassTransit;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace UserApplication.Services
     {
         private readonly IBaseRepository<User> _baseRepository;
         private readonly IUserRepository _userRepository;
-      private readonly IRequestClient<AccountNameEvent> _requestClient;
+        private readonly IRequestClient<AccountNameEvent> _requestClient;
         private readonly IStorageService _storageService;
 
         public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IStorageService storageService, IRequestClient<AccountNameEvent> requestClient)
@@ -25,8 +26,25 @@ namespace UserApplication.Services
             _baseRepository=baseRepository;
             _userRepository=userRepository;
             _storageService=storageService;
-             _requestClient=requestClient;
+            _requestClient=requestClient;
+        }
 
+        public async Task<UserCommentEvent> getUsercommentbyAccountName(string accountName)
+        {
+            var result = await _userRepository.GetbyAccountName(accountName);
+
+            if (result == null) { return new UserCommentEvent(); }
+            var response = new UserCommentEvent
+            {
+                Id =result.Id,
+                FullName = result.FullName,
+                AccountName = result.AccountName,
+                Title = result.Title,
+                Avatar = _storageService.GetFileUrl(result.UrlAvatar),
+                Followers = await _userRepository.CountFolloweeorFollower(accountName, true),
+            };
+            return response;
+        }
 
         public async Task<int> ChangePrivatedAccount(PrivateAccountVM request)
         {
@@ -45,15 +63,33 @@ namespace UserApplication.Services
         {
             var response = await _userRepository.GetInfoUser(requestName);
             response.UrlAvatar = _storageService.GetFileUrl(response.UrlAvatar);
+            ResponseListPostViewModel? postViewModelEvent = null;
+
+            try
+            {
+                var result1 = await _requestClient.GetResponse<ResponseListPostViewModel>(
+                    new AccountNameEvent { AccountName = requestName });
+
+                postViewModelEvent = new ResponseListPostViewModel
+                {
+                    resultofrespone= result1.Message.resultofrespone
+                };
+            }
+            catch (RequestTimeoutException ex)
+            {
+                Console.WriteLine($"Service 2 không phản hồi: {ex.Message}");
+                postViewModelEvent = new ResponseListPostViewModel
+                {
+                    resultofrespone= new List<PostViewModelEvent>() // Trả về danh sách rỗng thay vì lỗi
+                };
+            }
             return new ResponseInformationUserVM
             {
                 InfoUser =response
             ,
-                Type="public"
+                Type="public",
+                PostViewModelEvent= postViewModelEvent.resultofrespone,
             };
-            var result = await _requestClient.GetResponse<PostViewModelEvent>(requestName);
-            Console.WriteLine(result.Message.Id);
-            return response;
         }
 
         public async Task<List<User>> GetAll()
@@ -109,7 +145,7 @@ namespace UserApplication.Services
         public async Task<string> GetstringAccountUser(string requestid)
         {
             var response = await _baseRepository.GetbyId(requestid);
-            return response.AccountName ?? string.Empty;
+            return response.AccountName ??"";
         }
     }
 }

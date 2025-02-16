@@ -80,9 +80,26 @@ namespace UserInfrastructure.Repositories
         public async Task<List<User>?> GetUserToSreach(string request)
         {
             var result = await _userDbContext.Users
+                            .Include(u => u.Followers)
                            .Where(u => u.FullName.Contains(request) || u.AccountName.Contains(request))
                            .ToListAsync();
             return result;
+        }
+
+        public async Task<int> CountFolloweeorFollower(string requestId, bool requestType)
+        {
+            var result = await _userDbContext.Users.FirstOrDefaultAsync(x => x.AccountName.Equals(requestId));
+            if (result == null) return -1;
+            if (requestType)// follower
+            {
+                if (result.Followers == null) return 0;
+                return result.Followers.Count;
+            }
+            else//followee
+            {
+                if (result.Followees == null) return 0;
+                return result.Followees.Count;
+            }
         }
     }
 }

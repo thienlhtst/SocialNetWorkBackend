@@ -18,6 +18,8 @@ namespace PostCore.InterfaceRepositories
 
         Task<int> DeleteRange(List<T> entities);
 
+        Task<bool> ExistsEntity(string id);
+
         Task<T> GetById(string id);
 
         Task<List<T>> GetAll();

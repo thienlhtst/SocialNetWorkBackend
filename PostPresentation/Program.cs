@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PostApplication.CommunicateServices;
 using PostApplication.Interfaces;
 using PostApplication.Services;
 using PostCore.Entities;
@@ -20,10 +21,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PostDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PostDbSC")));
 builder.Services.AddTransient<IGenericRepository<Posts>, GenericRepository<Posts>>();
 builder.Services.AddTransient<IGenericRepository<Media>, GenericRepository<Media>>();
+builder.Services.AddTransient<IGenericRepository<Comment>, GenericRepository<Comment>>();
+
 builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
 builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IReactionService, ReactionService>();
+
 builder.Services.AddTransient<IMediaService, MediaService>();
+builder.Services.AddTransient<IPostUserServices, PostUserServices>();
+builder.Services.AddTransient<ICommentService, CommentServices>();
+
 builder.Services.AddTransient<IPostRepository, PostRepository>();
 builder.Services.AddTransient<IReactionRepository, ReactionRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentRepository>();

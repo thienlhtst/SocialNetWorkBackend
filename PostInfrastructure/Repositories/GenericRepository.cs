@@ -12,9 +12,11 @@ namespace PostInfrastructure.Repositories
     {
         private readonly PostDbContext _postDbContext;
 
-        public GenericRepository(PostDbContext postDbContext) {
-            _postDbContext = postDbContext;   
+        public GenericRepository(PostDbContext postDbContext)
+        {
+            _postDbContext = postDbContext;
         }
+
         public async Task<T> Create(T entity)
         {
             var result = await _postDbContext.Set<T>().AddAsync(entity);
@@ -40,16 +42,20 @@ namespace PostInfrastructure.Repositories
             return await _postDbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> ExistsEntity(string id)
+        {
+            return await _postDbContext.Set<T>().AnyAsync(x => EF.Property<string>(x, "Id") == id);
+        }
+
         public async Task<List<T>> GetAll()
         {
             List<T> result = await _postDbContext.Set<T>().ToListAsync();
             return result;
         }
 
-        public async Task<T> GetById(string id)
+        public async Task<T?> GetById(string id)
         {
-            var result = await _postDbContext.Set<T>().FindAsync(id);
-            return result;
+            return await _postDbContext.Set<T>().FirstOrDefaultAsync(e => EF.Property<string>(e, "Id") == id) ?? null;
         }
 
         public async Task<T> Update(T entity)

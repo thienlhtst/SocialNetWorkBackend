@@ -13,6 +13,8 @@ namespace UserCore.InterfaceRepositories
 
         public Task<User?> GetbyAccountName(string request);
 
+        public Task<int> CountFolloweeorFollower(string requestId, bool requestType);
+
         Task<User?> GetInfoUser(string requestName);
 
         public Task<List<User>?> GetFollowerOrFolloweeUser(string requestId, string type, bool typePrivate);

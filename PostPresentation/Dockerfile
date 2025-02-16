@@ -11,17 +11,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["PostResentation/PostResentation.csproj", "PostResentation/"]
-RUN dotnet restore "./PostResentation/PostResentation.csproj"
+COPY ["PostPresentation/PostPresentation.csproj", "PostPresentation/"]
+RUN dotnet restore "./PostPresentation/PostPresentation.csproj"
 COPY . .
-WORKDIR "/src/PostResentation"
-RUN dotnet build "./PostResentation.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+WORKDIR "/src/PostPresentation"
+RUN dotnet build "./PostPresentation.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./PostResentation.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./PostPresentation.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "PostResentation.dll"]
+ENTRYPOINT ["dotnet", "PostPresentation.dll"]

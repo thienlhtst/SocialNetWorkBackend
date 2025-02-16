@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PostApplication.ViewModel.CommentViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace PostApplication.Interfaces
 {
     public interface ICommentService
     {
+        public Task<List<CommentViewModel>> GetAllCommentbyParentId(string parentid, string accountname);
     }
 }

@@ -4,7 +4,7 @@ using PostApplication.ViewModel.PostViewModel;
 using PostCore.Entities;
 using PostCore.InterfaceRepositories;
 
-namespace PostResentation.Controllers
+namespace PostPresentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

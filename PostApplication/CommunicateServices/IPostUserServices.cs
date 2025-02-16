@@ -1,4 +1,5 @@
-﻿using PostApplication.ViewModel.CommentViewModel;
+﻿using ConsumerViewModel.UserToComment;
+using PostApplication.ViewModel.CommentViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
