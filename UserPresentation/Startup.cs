@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using ConsumerViewModel;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -85,68 +87,88 @@ namespace UserPresentation
                 x.AddRequestClient<AccountNameEvent>();
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.Host("localhost", "/", h =>
+                    cfg.Host("rabbitmq", "/", h =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        h.Username("admin");
+                        h.Password("admin");
                     });
                     cfg.ConfigureEndpoints(ctx);
                 });
             });
             services.AddMassTransitHostedService();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme=JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }
+             )
                         .AddJwtBearer(options =>
                         {
+                            options.RequireHttpsMetadata = false; // Nếu chạy localhost, có thể tắt HTTPS
+                            options.SaveToken = true;
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
-                                ValidateIssuer = true,
-                                ValidateAudience = true,
-                                ValidateLifetime = true,
-                                ValidateIssuerSigningKey = true,
+                                ValidateIssuer = true,  // Kiểm tra Issuer
+                                ValidateAudience = true,  // Kiểm tra Audience
+                                ValidateLifetime = true,  // Kiểm tra thời gian hết hạn của token
+                                ValidateIssuerSigningKey = true,  // Kiểm tra khóa ký token
                                 ValidIssuer = Configuration["Jwt:Issuer"],
                                 ValidAudience = Configuration["Jwt:Audience"],
                                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                             };
                             options.Events = new JwtBearerEvents
                             {
-                                OnTokenValidated = context =>
+                                OnAuthenticationFailed = context =>
                                 {
-                                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
-                                    if (claimsIdentity != null)
-                                    {
-                                        // Thêm claim tùy chỉnh từ token vào User.Claims
-                                        var jwtToken = context.SecurityToken as JwtSecurityToken;
-                                        if (jwtToken != null)
-                                        {
-                                            foreach (var claim in jwtToken.Claims)
-                                            {
-                                                claimsIdentity.AddClaim(claim);
-                                            }
-                                        }
-                                    }
+                                    Console.WriteLine($"Authentication failed: {context.Exception.Message}");
                                     return Task.CompletedTask;
                                 }
                             };
                         });
 
-            services.AddSwaggerGen(options =>
+            services.AddSwaggerGen(c =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "User Solution", Version = "v1" });
-
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        BearerFormat="JWT",
+                        Scheme= JwtBearerDefaults.AuthenticationScheme,
+                        In = ParameterLocation.Header,
+                        Description =
+                            "Please enter into field the word 'Bearer' following by space and JWT",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        Reference= new OpenApiReference
+                        {
+                            Id =JwtBearerDefaults.AuthenticationScheme,
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                    {
+                        new OpenApiSecurityScheme {
+                            Reference =
+                                new OpenApiReference {
+                                    Type = ReferenceType.SecurityScheme, Id = "Bearer"
+                                },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
                 });
-                options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
             services.AddCors(o => o.AddPolicy("CorsPolicy", b =>
             {
-                b.AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowAnyOrigin();
+                b.WithOrigins("http://localhost:8080") // Chỉ định rõ origin
+              .AllowCredentials() // Cho phép gửi cookies, tokens
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+                //.AllowAnyOrigin();
             }));
             //services.AddSignalR(options => { options.KeepAliveInterval = TimeSpan.FromSeconds(5); }).AddMessagePackProtocol();
         }

@@ -13,11 +13,13 @@ namespace UserApplication.Interfaces
     {
         Task<int> ChangePrivatedAccount(PrivateAccountVM request);
 
-        public Task<ResponseInformationUserVM?> GetInformationUser(string requestName);
+        public Task<ResponseInformationUserVM?> GetInformationUser(string requestName, string CurenntID);
 
         public Task<string> GetstringAccountUser(string requestid);
 
         public Task<UserCommentEvent> getUsercommentbyAccountName(string accountName);
+
+        public Task<User?> UpdateAvatarUser(string IdUser, RequestUpdateAvatarUserVM request);
 
         public Task<List<User>?> GetListSreachUser(string request);
 

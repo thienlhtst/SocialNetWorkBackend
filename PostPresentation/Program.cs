@@ -49,10 +49,10 @@ builder.Services.AddMassTransit(x =>
     x.AddActivities(asb);
     x.UsingRabbitMq((ctx, cfg) =>
     {
-        cfg.Host("localhost", "/", h =>
+        cfg.Host("rabbitmq", "/", h =>
         {
-            h.Username("guest");
-            h.Password("guest");
+            h.Username("admin");
+            h.Password("admin");
         });
         cfg.ConfigureEndpoints(ctx);
     });
@@ -63,14 +63,36 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 ); ;
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<PostDbContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+        throw;
+    }
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles();
 
+app.UseCors("CorsPolicy");
+app.UseWebSockets();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger T2Pro V1");
+});
+app.UseSwagger();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

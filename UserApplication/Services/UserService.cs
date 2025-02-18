@@ -59,10 +59,19 @@ namespace UserApplication.Services
             return 0;
         }
 
-        public async Task<ResponseInformationUserVM?> GetInformationUser(string requestName)
+        public async Task<ResponseInformationUserVM?> GetInformationUser(string requestName, string currentID)
         {
             var response = await _userRepository.GetInfoUser(requestName);
             response.UrlAvatar = _storageService.GetFileUrl(response.UrlAvatar);
+            var Isfollow = 0;//chua follow
+            if (response.Followers.FirstOrDefault(x => x.UserIdFollower.Equals(currentID)) != null)
+            {
+                Isfollow=1; // da follow
+            }
+            if (response.Followees.FirstOrDefault(x => x.UserIdFollower.Equals(currentID)) != null)
+            {
+                Isfollow=2;// follow lai
+            }
             ResponseListPostViewModel? postViewModelEvent = null;
 
             try
@@ -87,6 +96,7 @@ namespace UserApplication.Services
             {
                 InfoUser =response
             ,
+                IsFollow=Isfollow,
                 Type="public",
                 PostViewModelEvent= postViewModelEvent.resultofrespone,
             };
@@ -128,7 +138,9 @@ namespace UserApplication.Services
             var entity = await _baseRepository.GetbyId(IdUser);
             if (entity != null)
             {
-                entity.UrlAvatar = entity+"_avatar";
+                string fileName = request.file.FileName;
+                string fileExtension = Path.GetExtension(fileName);
+                entity.UrlAvatar = entity.AccountName+"_avatar"+fileExtension;
                 await _storageService.SaveFileAsync(request.file.OpenReadStream(), entity.UrlAvatar);
                 var reponse = await _baseRepository.Update(entity);
                 return reponse;
@@ -144,8 +156,11 @@ namespace UserApplication.Services
 
         public async Task<string> GetstringAccountUser(string requestid)
         {
+            var accountname = "";
+
             var response = await _baseRepository.GetbyId(requestid);
-            return response.AccountName ??"";
+            if (response != null) { return response.AccountName; }
+            return accountname;
         }
     }
 }

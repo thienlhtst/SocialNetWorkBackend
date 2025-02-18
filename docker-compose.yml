@@ -18,7 +18,7 @@ services:
       context: ./
       dockerfile: UserPresentation\Dockerfile
     ports:
-      - 3334:8080
+      - 3336:8080
     networks :
       - SC-mynetwork
     environment:
@@ -26,6 +26,9 @@ services:
       RABBITMQ__HOST: rabbitmq
       RABBITMQ__USERNAME: admin
       RABBITMQ__PASSWORD: admin
+    volumes:
+      - ./wwwroot:/app/wwwroot
+      - /etc/someshit:/root/.aspnet/DataProtection-Keys
     depends_on:
       - rabbitmq
       - db-sc

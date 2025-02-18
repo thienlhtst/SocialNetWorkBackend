@@ -28,18 +28,26 @@ namespace UserPresentation.Controllers
             return Ok(result);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("userinfo/{name}")]
         public async Task<IActionResult> GetUserInfo(string name)
         {
-            var username = await _userService.GetstringAccountUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var result = await _userService.GetInformationUser(name);
+            var username = await _userService.GetstringAccountUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
+            var result = await _userService.GetInformationUser(name, User.FindFirst(ClaimTypes.NameIdentifier)?.Value?? "");
             if (username ==name)
             {
                 result.Type="private";
-
+                result.IsFollow=0;
                 return Ok(result);
             }
+            result.Type="public";
+            return Ok(result);
+        }
+
+        [HttpGet("userinfowithoutauthor/{name}")]
+        public async Task<IActionResult> GetUserInfoWithoutAuthour(string name)
+        {
+            var result = await _userService.GetInformationUser(name, "");
             result.Type="public";
             return Ok(result);
         }
@@ -47,7 +55,7 @@ namespace UserPresentation.Controllers
         [HttpGet("information/{id}")]
         public async Task<IActionResult> GetInformationAccout(string id)
         {
-            var result = await _userService.GetInformationUser(id);
+            var result = await _userService.GetInformationUser(id, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             return Ok(result);
         }
 
@@ -62,6 +70,16 @@ namespace UserPresentation.Controllers
         public async Task<IActionResult> ChangePrivateAccount([FromForm] PrivateAccountVM request)
         {
             var result = await _userService.ChangePrivatedAccount(request);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPut("updateAvatar")]
+        public async Task<IActionResult> ChangeAvatar(IFormFile request)
+        {
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
+            var result = await _userService.UpdateAvatarUser(username, new RequestUpdateAvatarUserVM { file=request });
+
             return Ok(result);
         }
 

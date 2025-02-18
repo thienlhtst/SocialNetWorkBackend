@@ -45,8 +45,8 @@ namespace UserInfrastructure.Repositories
                             .Select(u => new
                             {
                                 User = u,
-                                Followees = u.Followees.ToList(),
-                                Followers = u.Followers.ToList(),
+                                Followees = u.Followers.ToList(),
+                                Followers = u.Followees.ToList(),
                             }).FirstOrDefaultAsync();
             if (result==null) return null;
             if (result.Followees!=null)

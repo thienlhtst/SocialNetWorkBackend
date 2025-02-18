@@ -11,6 +11,7 @@ namespace UserApplication.ViewModel.UserViewModel
     public class ResponseInformationUserVM
     {
         public string Type { get; set; }
+        public int IsFollow { get; set; }
         public User InfoUser { get; set; }
         public List<PostViewModelEvent> PostViewModelEvent { get; set; }
     }
