@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using UserApplication.Interfaces;
 using UserApplication.ViewModel.UserViewModel;
@@ -62,7 +63,7 @@ namespace UserPresentation.Controllers
         [HttpGet("sreachUser/{requestString}")]
         public async Task<IActionResult> GetListSreachUser(string requestString)
         {
-            var result = await _userService.GetListSreachUser(requestString);
+            var result = await _userService.GetListSreachUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value??"", requestString);
             return Ok(result);
         }
 
@@ -83,17 +84,18 @@ namespace UserPresentation.Controllers
             return Ok(result);
         }
 
-        [HttpPut("changeInfo/{id}")]
-        public async Task<IActionResult> ChangeInforAccount(string id, RequestUpdateUserVM request)
+        [Authorize]
+        [HttpPut("changeInfo")]
+        public async Task<IActionResult> ChangeInforAccount(RequestUpdateUserVM request)
         {
-            var result = await _userService.UpdateInformationUser(id, request);
+            var result = await _userService.UpdateInformationUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "", request);
             return Ok(result);
         }
 
-        [HttpGet("GetListFollow/{id}")]
-        public async Task<IActionResult> GetFollowerOrFolloweeUser(string id, string type, bool typePrivate = true)
+        [HttpGet("GetListFollow/{accountname}")]
+        public async Task<IActionResult> GetFollowerOrFolloweeUser(string accountname, string type, bool typePrivate = true)
         {
-            var result = await _userService.GetFollowerOrFolloweeUser(id, type, typePrivate);
+            var result = await _userService.GetFollowerOrFolloweeUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "", accountname, type, typePrivate);
             return Ok(result);
         }
     }

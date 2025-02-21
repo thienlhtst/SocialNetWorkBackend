@@ -64,5 +64,10 @@ namespace UserApplication.Services
             if (result == 1) { return 1; }
             return 0;
         }
+
+        public Task<int> CheckFollowFromUser(string requestId, string recipientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

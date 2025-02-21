@@ -21,10 +21,10 @@ namespace UserApplication.Interfaces
 
         public Task<User?> UpdateAvatarUser(string IdUser, RequestUpdateAvatarUserVM request);
 
-        public Task<List<User>?> GetListSreachUser(string request);
+        public Task<List<UserSreachVM>?> GetListSreachUser(string OwnId, string request);
 
         public Task<User?> UpdateInformationUser(string IdUser, RequestUpdateUserVM request);
 
-        public Task<List<User>> GetFollowerOrFolloweeUser(string requestId, string type, bool typePrivate);
+        public Task<List<UserFollowProfileVM>> GetFollowerOrFolloweeUser(string OwnnerId, string requestAccountname, string type, bool typePrivate);
     }
 }
