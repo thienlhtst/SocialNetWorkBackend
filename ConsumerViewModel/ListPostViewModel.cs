@@ -19,7 +19,7 @@ namespace ConsumerViewModel
 
     public class UserPostsEvent
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string AccountName { get; set; }
         public string FullName { get; set; }
         public string Title { get; set; }
@@ -41,7 +41,7 @@ namespace ConsumerViewModel
         public string Id { get; set; }
         public UserPostsEvent? User { get; set; }
         public string Content { get; set; }
-        public string TimePost { get; set; }
+        public DateTime TimePost { get; set; }
         public List<MediaEvent>? Media { get; set; }
         public LikeViewModelEvent Like { get; set; }
         public int CountComment { get; set; }

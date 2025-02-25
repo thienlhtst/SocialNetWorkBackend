@@ -22,6 +22,9 @@ builder.Services.AddDbContext<PostDbContext>(options => options.UseSqlServer(bui
 builder.Services.AddTransient<IGenericRepository<Posts>, GenericRepository<Posts>>();
 builder.Services.AddTransient<IGenericRepository<Media>, GenericRepository<Media>>();
 builder.Services.AddTransient<IGenericRepository<Comment>, GenericRepository<Comment>>();
+builder.Services.AddTransient<IGenericRepository<Topic>, GenericRepository<Topic>>();
+builder.Services.AddTransient<IGenericRepository<TopicUser>, GenericRepository<TopicUser>>();
+builder.Services.AddTransient<IGenericRepository<TopicPost>, GenericRepository<TopicPost>>();
 
 builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
 builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
@@ -32,6 +35,7 @@ builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddTransient<IPostUserServices, PostUserServices>();
 builder.Services.AddTransient<ICommentService, CommentServices>();
 
+builder.Services.AddTransient<ITopicRepository, TopicRepository>();
 builder.Services.AddTransient<IPostRepository, PostRepository>();
 builder.Services.AddTransient<IReactionRepository, ReactionRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentRepository>();

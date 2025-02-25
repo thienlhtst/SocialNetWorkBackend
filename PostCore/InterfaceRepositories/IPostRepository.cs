@@ -15,5 +15,7 @@ namespace PostCore.InterfaceRepositories
         public Task<List<Posts>> GetListLikeByAccountName(string accountName);
 
         public Task<List<Posts>> GetPostAndMedia();
+
+        public Task<List<Posts>> GetPrioritizedPosts(string accountName, int numberPosts);
     }
 }

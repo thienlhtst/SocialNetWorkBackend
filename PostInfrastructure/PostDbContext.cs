@@ -25,6 +25,10 @@ namespace PostInfrastructure
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
             modelBuilder.ApplyConfiguration(new MediaConfiguration());
             modelBuilder.ApplyConfiguration(new ReactionConfiguration());
+            modelBuilder.ApplyConfiguration(new TopicConfiguration());
+            modelBuilder.ApplyConfiguration(new TopicPostConfiguration());
+            modelBuilder.ApplyConfiguration(new TopicUserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserPostViewsConfiguration());
             modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
@@ -32,6 +36,9 @@ namespace PostInfrastructure
         public DbSet<Posts> Posts { get; set; }
         public DbSet<Media> Medias { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<TopicPost> TopicPosts { get; set; }
+        public DbSet<TopicUser> TopicUsers { get; set; }
+        public DbSet<UserPostViews> UserPostViews { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
     }
 }

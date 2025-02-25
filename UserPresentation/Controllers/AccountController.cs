@@ -51,7 +51,7 @@ namespace UserPresentation.Controllers
             {
                 var token = GenerateJwtToken(checkaccount);
 
-                return Ok(new { token });
+                return Ok(new { token, checkaccount.AccountName });
             }
 
             return Unauthorized("Invalid login attempt.");

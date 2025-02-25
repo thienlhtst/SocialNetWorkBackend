@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace PostCore.InterfaceRepositories
 {
-    public interface IMediaRepository
+    public interface ITopicRepository
     {
-        public Task<List<Media>> GetAllbyParentId(string parentId);
-
-        public Task<int> CreateMedia(List<Media> medias);
+        Task<List<TopicUser>> GetAllbyUser(string AccountName);
     }
 }

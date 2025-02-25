@@ -17,5 +17,8 @@ namespace PostCore.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public Privacy Privacy { get; set; } = Privacy.Public;
         public string? RepostId { get; set; } = string.Empty;
+        public List<UserPostViews> UserPostViews { get; set; } = new List<UserPostViews> { };
+
+        public List<TopicPost> TopicPosts { get; set; } = new List<TopicPost> { };
     }
 }

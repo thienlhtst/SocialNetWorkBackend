@@ -19,6 +19,12 @@ namespace PostInfrastructure.Repositories
             _postDbContext = postDbContext;
         }
 
+        public async Task<int> CreateMedia(List<Media> medias)
+        {
+            _postDbContext.Medias.AddRange(medias);
+            return await _postDbContext.SaveChangesAsync();
+        }
+
         public async Task<List<Media>> GetAllbyParentId(string parentId)
         {
             var data = _postDbContext.Medias.Where(m => m.ParentId.Equals(parentId));

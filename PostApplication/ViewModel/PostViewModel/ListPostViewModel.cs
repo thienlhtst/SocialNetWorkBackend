@@ -9,7 +9,7 @@ namespace PostApplication.ViewModel.PostViewModel
 {
     public class UserPosts
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string AccountName { get; set; }
         public string FullName { get; set; }
         public string Title { get; set; }
@@ -31,7 +31,7 @@ namespace PostApplication.ViewModel.PostViewModel
         public string Id { get; set; }
         public UserPosts? User { get; set; }
         public string Content { get; set; }
-        public string TimePost { get; set; }
+        public DateTime TimePost { get; set; }
         public List<Media>? Media { get; set; }
         public LikeViewModel Like { get; set; }
         public int CountComment { get; set; }

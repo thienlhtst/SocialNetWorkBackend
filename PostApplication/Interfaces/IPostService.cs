@@ -11,12 +11,14 @@ namespace PostApplication.Interfaces
 {
     public interface IPostService
     {
-        Task<Posts> Create(CreatePostViewModel request);
+        Task<int> Create(CreatePostViewModel request);
 
         Task<Posts> Update(UpdatePostViewModel request);
 
         Task<List<PostViewModel>> GetListByAccountName(string accountName);
 
         Task<List<Posts>> GetListPostRelatedToAll();
+
+        Task<List<PostViewModel>> GetListForHomePage(string accountName, int numberPost);
     }
 }
