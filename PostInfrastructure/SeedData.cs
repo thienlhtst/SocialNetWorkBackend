@@ -24,7 +24,6 @@ namespace PostInfrastructure
                    UpdatedAt = DateTime.Now,
                    Privacy = Privacy.Public,
                    RepostId = null,
-                   TopicPosts = new List<TopicPost>()
                },
     new Posts
     {
@@ -35,7 +34,6 @@ namespace PostInfrastructure
         UpdatedAt = DateTime.Now,
         Privacy = Privacy.Public,
         RepostId = null,
-        TopicPosts = new List<TopicPost>()
     },
     new Posts
     {
@@ -46,7 +44,6 @@ namespace PostInfrastructure
         UpdatedAt = DateTime.Now,
         Privacy = Privacy.Public,
         RepostId = null,
-        TopicPosts = new List<TopicPost>()
     }
 
                 );
@@ -64,8 +61,13 @@ namespace PostInfrastructure
                 );
             modelbuilder.Entity<TopicPost>().HasData(
                 new TopicPost { PostId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b", TopicId = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0" }, // AI -> Công nghệ
-    new TopicPost { PostId = "c3d5e7a9-b1f2-40c3-d4e5-a6b7c8f9d0e1", TopicId = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7" }, // Bóng đá -> Thể thao
-    new TopicPost { PostId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6", TopicId = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0" }  // Nhạc -> Âm nhạc
+                 new TopicPost { PostId = "c3d5e7a9-b1f2-40c3-d4e5-a6b7c8f9d0e1", TopicId = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7" }, // Bóng đá -> Thể thao
+                new TopicPost { PostId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6", TopicId = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0" }  // Nhạc -> Âm nhạc
+                );
+            modelbuilder.Entity<TopicUser>().HasData(
+                new TopicUser { AccountName = "thienminh", TopicId = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0" }, // AI -> Công nghệ
+                 new TopicUser { AccountName = "thienminh", TopicId = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7" }, // Bóng đá -> Thể thao
+                new TopicUser { AccountName = "thienminh", TopicId = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0" }  // Nhạc -> Âm nhạc
                 );
         }
     }

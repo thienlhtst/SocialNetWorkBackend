@@ -66,6 +66,15 @@ namespace PostApplication.CommunicateServices
             catch (RequestTimeoutException ex)
             {
                 Console.WriteLine($"Service user không phản hồi: {ex.Message}");
+                result=  new UserPosts
+                {
+                    Id ="khong co",
+                    Avatar = "khong co",
+                    FullName= "khong co",
+                    AccountName = "khong co",
+                    Followers= 0,
+                    Title = "khong co",
+                };
             }
 
             return result;

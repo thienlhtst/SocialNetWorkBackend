@@ -12,15 +12,19 @@ namespace PostInfrastructure.Repositories
     public class CommentRepository : ICommentRepository
     {
         private readonly PostDbContext _postDbContext;
+        private readonly IDbContextFactory<PostDbContext> _contextFactory;
 
-        public CommentRepository(PostDbContext postDbContext)
+        public CommentRepository(PostDbContext postDbContext, IDbContextFactory<PostDbContext> contextFactory)
         {
-            _postDbContext = postDbContext;
+            _postDbContext=postDbContext;
+            _contextFactory=contextFactory;
         }
 
         public async Task<int> CounComment(string id)
         {
-            var count = await _postDbContext.Comments
+            using var context = _contextFactory.CreateDbContext();
+
+            var count = await context.Comments
      .Where(x => x.ParentId == id)
      .CountAsync(); // Trả về số lượng trực tiếp từ SQL Server
 

@@ -87,10 +87,10 @@ namespace UserPresentation
                 x.AddRequestClient<AccountNameEvent>();
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.Host("rabbitmq", "/", h =>
+                    cfg.Host(Configuration["rabitmq:host"], "/", h =>
                     {
-                        h.Username("admin");
-                        h.Password("admin");
+                        h.Username(Configuration["rabitmq:username"]);
+                        h.Password(Configuration["rabitmq:password"]);
                     });
                     cfg.ConfigureEndpoints(ctx);
                 });

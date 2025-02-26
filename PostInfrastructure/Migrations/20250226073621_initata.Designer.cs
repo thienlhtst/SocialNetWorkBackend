@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PostInfrastructure;
 
@@ -11,9 +12,11 @@ using PostInfrastructure;
 namespace PostInfrastructure.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    partial class PostDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250226073621_initata")]
+    partial class initata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,9 +58,9 @@ namespace PostInfrastructure.Migrations
                             Id = "4752c4fe-1546-4c01-a46f-e9fcab755389",
                             AccountName = "tienminh",
                             Content = "Test Du lieu Comment xiu di ban oi",
-                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 582, DateTimeKind.Local).AddTicks(6412),
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 836, DateTimeKind.Local).AddTicks(4741),
                             ParentId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
-                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 582, DateTimeKind.Local).AddTicks(6690)
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 836, DateTimeKind.Local).AddTicks(5022)
                         });
                 });
 
@@ -139,27 +142,27 @@ namespace PostInfrastructure.Migrations
                             Id = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
                             AccountName = "thienzn",
                             Content = "AI đang thay đổi thế giới như thế nào?",
-                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(3369),
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 835, DateTimeKind.Local).AddTicks(193),
                             Privacy = 1,
-                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(3708)
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 835, DateTimeKind.Local).AddTicks(517)
                         },
                         new
                         {
                             Id = "c3d5e7a9-b1f2-40c3-d4e5-a6b7c8f9d0e1",
                             AccountName = "tienminh",
                             Content = "Chung kết Champions League sắp diễn ra!",
-                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4596),
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 835, DateTimeKind.Local).AddTicks(1388),
                             Privacy = 1,
-                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4596)
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 835, DateTimeKind.Local).AddTicks(1389)
                         },
                         new
                         {
                             Id = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
                             AccountName = "minhthanh",
                             Content = "Bản hit mới nhất của ca sĩ X đang làm mưa làm gió",
-                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4603),
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 835, DateTimeKind.Local).AddTicks(1397),
                             Privacy = 1,
-                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4604)
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 36, 20, 835, DateTimeKind.Local).AddTicks(1398)
                         });
                 });
 
@@ -256,23 +259,6 @@ namespace PostInfrastructure.Migrations
                     b.HasKey("TopicId", "AccountName");
 
                     b.ToTable("TopicUser", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            TopicId = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0",
-                            AccountName = "thienminh"
-                        },
-                        new
-                        {
-                            TopicId = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7",
-                            AccountName = "thienminh"
-                        },
-                        new
-                        {
-                            TopicId = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0",
-                            AccountName = "thienminh"
-                        });
                 });
 
             modelBuilder.Entity("PostCore.Entities.UserPostViews", b =>

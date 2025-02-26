@@ -15,12 +15,14 @@ namespace PostApplication.Services
         private readonly ITopicRepository _topicRepository;
         private readonly IGenericRepository<Topic> _topicGenericRepository;
         private readonly IGenericRepository<TopicUser> _UsertopicGenericRepository;
+        private readonly IGenericRepository<TopicPost> _TopicPostGenericRepository;
 
-        public TopicServices(ITopicRepository topicRepository, IGenericRepository<Topic> topicGenericRepository, IGenericRepository<TopicUser> usertopicGenericRepository)
+        public TopicServices(ITopicRepository topicRepository, IGenericRepository<Topic> topicGenericRepository, IGenericRepository<TopicUser> usertopicGenericRepository, IGenericRepository<TopicPost> topicPostGenericRepository)
         {
             _topicRepository=topicRepository;
             _topicGenericRepository=topicGenericRepository;
             _UsertopicGenericRepository=usertopicGenericRepository;
+            _TopicPostGenericRepository=topicPostGenericRepository;
         }
 
         public async Task<int> CreateTopic(List<RequestCreateTopicVM> request)
@@ -66,6 +68,12 @@ namespace PostApplication.Services
         {
             var find = await _topicGenericRepository.GetById(Id);
             return await _topicGenericRepository.Delete(find);
+        }
+
+        public async Task<List<TopicPost>> GetAllPost()
+        {
+            var query = await _TopicPostGenericRepository.GetAll();
+            return query;
         }
 
         public async Task<List<RequestTopicVM>> GetAllTopic()

@@ -10,6 +10,6 @@ namespace PostCore.Entities
     {
         public string AccountName { get; set; } = string.Empty;
         public string TopicId { get; set; } = string.Empty;
-        public Topic Topic { get; set; } = new Topic();
+        public Topic Topic { get; set; }
     }
 }

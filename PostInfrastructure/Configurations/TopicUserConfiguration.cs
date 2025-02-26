@@ -13,8 +13,7 @@ namespace PostInfrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<TopicUser> builder)
         {
-            builder.ToTable("TopicUser");
-            builder.HasKey(e => new { e.TopicId, e.AccountName });
+            builder.ToTable("TopicUser").HasKey(e => new { e.TopicId, e.AccountName });
             builder.HasOne(x => x.Topic).WithMany(x => x.TopicUsers).HasForeignKey(x => x.TopicId);
         }
     }

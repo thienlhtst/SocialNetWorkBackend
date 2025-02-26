@@ -12,8 +12,8 @@ using PostInfrastructure;
 namespace PostInfrastructure.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20250224090224_topicGenerate")]
-    partial class topicGenerate
+    [Migration("20250225154310_Dataseed1")]
+    partial class Dataseed1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,9 +58,9 @@ namespace PostInfrastructure.Migrations
                             Id = "4752c4fe-1546-4c01-a46f-e9fcab755389",
                             AccountName = "tienminh",
                             Content = "Test Du lieu Comment xiu di ban oi",
-                            CreatedAt = new DateTime(2025, 2, 24, 16, 2, 23, 612, DateTimeKind.Local).AddTicks(5714),
-                            ParentId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
-                            UpdatedAt = new DateTime(2025, 2, 24, 16, 2, 23, 612, DateTimeKind.Local).AddTicks(6053)
+                            CreatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 560, DateTimeKind.Local).AddTicks(5178),
+                            ParentId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
+                            UpdatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 560, DateTimeKind.Local).AddTicks(5431)
                         });
                 });
 
@@ -101,7 +101,7 @@ namespace PostInfrastructure.Migrations
                             Height = 0.0,
                             MediaName = "testdulieu",
                             MediaType = 0,
-                            ParentId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
+                            ParentId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
                             Url = "/test",
                             Width = 0.0
                         });
@@ -141,10 +141,28 @@ namespace PostInfrastructure.Migrations
                         {
                             Id = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
                             AccountName = "thienzn",
-                            Content = "Test Du lieu xiu di ban oi",
-                            CreatedAt = new DateTime(2025, 2, 24, 16, 2, 23, 610, DateTimeKind.Local).AddTicks(8120),
+                            Content = "AI đang thay đổi thế giới như thế nào?",
+                            CreatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 559, DateTimeKind.Local).AddTicks(3136),
                             Privacy = 1,
-                            UpdatedAt = new DateTime(2025, 2, 24, 16, 2, 23, 610, DateTimeKind.Local).AddTicks(8695)
+                            UpdatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 559, DateTimeKind.Local).AddTicks(3546)
+                        },
+                        new
+                        {
+                            Id = "c3d5e7a9-b1f2-40c3-d4e5-a6b7c8f9d0e1",
+                            AccountName = "tienminh",
+                            Content = "Chung kết Champions League sắp diễn ra!",
+                            CreatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 559, DateTimeKind.Local).AddTicks(4408),
+                            Privacy = 1,
+                            UpdatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 559, DateTimeKind.Local).AddTicks(4409)
+                        },
+                        new
+                        {
+                            Id = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
+                            AccountName = "minhthanh",
+                            Content = "Bản hit mới nhất của ca sĩ X đang làm mưa làm gió",
+                            CreatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 559, DateTimeKind.Local).AddTicks(4415),
+                            Privacy = 1,
+                            UpdatedAt = new DateTime(2025, 2, 25, 22, 43, 9, 559, DateTimeKind.Local).AddTicks(4416)
                         });
                 });
 
@@ -176,6 +194,26 @@ namespace PostInfrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Topic", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0",
+                            CountTopic = 0,
+                            Name = "Công nghệ"
+                        },
+                        new
+                        {
+                            Id = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7",
+                            CountTopic = 0,
+                            Name = "Thể thao"
+                        },
+                        new
+                        {
+                            Id = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0",
+                            CountTopic = 0,
+                            Name = "Âm nhạc"
+                        });
                 });
 
             modelBuilder.Entity("PostCore.Entities.TopicPost", b =>
@@ -191,6 +229,23 @@ namespace PostInfrastructure.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("TopicPost", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            TopicId = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0",
+                            PostId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b"
+                        },
+                        new
+                        {
+                            TopicId = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7",
+                            PostId = "c3d5e7a9-b1f2-40c3-d4e5-a6b7c8f9d0e1"
+                        },
+                        new
+                        {
+                            TopicId = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0",
+                            PostId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+                        });
                 });
 
             modelBuilder.Entity("PostCore.Entities.TopicUser", b =>
@@ -198,10 +253,10 @@ namespace PostInfrastructure.Migrations
                     b.Property<string>("TopicId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("AccountName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("TopicId", "UserId");
+                    b.HasKey("TopicId", "AccountName");
 
                     b.ToTable("TopicUser", (string)null);
                 });
@@ -211,13 +266,13 @@ namespace PostInfrastructure.Migrations
                     b.Property<string>("PostId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("AccountName")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.HasKey("PostId", "UserId");
+                    b.HasKey("PostId", "AccountName");
 
                     b.ToTable("UserPostViews", (string)null);
                 });

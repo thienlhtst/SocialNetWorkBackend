@@ -20,6 +20,8 @@ namespace PostApplication.Interfaces
 
         Task<List<RequestTopicVM>> GetAllTopic();
 
+        Task<List<TopicPost>> GetAllPost();
+
         Task<List<RequestTopicUserVM>> GetAllTopicbyUser(string AccountName);
     }
 }

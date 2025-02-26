@@ -38,6 +38,8 @@ namespace PostInfrastructure
         public DbSet<Comment> Comments { get; set; }
         public DbSet<TopicPost> TopicPosts { get; set; }
         public DbSet<TopicUser> TopicUsers { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+
         public DbSet<UserPostViews> UserPostViews { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
     }

@@ -10,5 +10,7 @@ namespace PostCore.InterfaceRepositories
     public interface ITopicRepository
     {
         Task<List<TopicUser>> GetAllbyUser(string AccountName);
+
+        Task<int> ChangeCountTopic(List<TopicPost> request);
     }
 }

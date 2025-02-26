@@ -10,6 +10,7 @@ using PostInfrastructure;
 using PostInfrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+var rabbitConfig = builder.Configuration.GetSection("rabitmq");
 
 // Add services to the container.
 
@@ -17,8 +18,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<PostDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PostDbSC")));
+builder.Services.AddDbContextFactory<PostDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PostDbSC")));
+//builder.Services.AddDbContext<PostDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PostDbSC")));
 builder.Services.AddTransient<IGenericRepository<Posts>, GenericRepository<Posts>>();
 builder.Services.AddTransient<IGenericRepository<Media>, GenericRepository<Media>>();
 builder.Services.AddTransient<IGenericRepository<Comment>, GenericRepository<Comment>>();
@@ -29,7 +31,10 @@ builder.Services.AddTransient<IGenericRepository<TopicPost>, GenericRepository<T
 builder.Services.AddTransient<IGenericService<Posts>, GenericService<Posts>>();
 builder.Services.AddTransient<IGenericService<Media>, GenericService<Media>>();
 builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<ITopicServices, TopicServices>();
+
 builder.Services.AddTransient<IReactionService, ReactionService>();
+builder.Services.AddTransient<IStorageService, FileStorageService>();
 
 builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddTransient<IPostUserServices, PostUserServices>();
@@ -53,10 +58,10 @@ builder.Services.AddMassTransit(x =>
     x.AddActivities(asb);
     x.UsingRabbitMq((ctx, cfg) =>
     {
-        cfg.Host("rabbitmq", "/", h =>
+        cfg.Host(rabbitConfig["host"], "/", h =>
         {
-            h.Username("admin");
-            h.Password("admin");
+            h.Username(rabbitConfig["username"]);
+            h.Password(rabbitConfig["password"]);
         });
         cfg.ConfigureEndpoints(ctx);
     });
@@ -67,13 +72,14 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 ); ;
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope()) // Tạo scope mới
 {
-    var services = scope.ServiceProvider;
+    var services = scope.ServiceProvider; // Lấy service provider từ scope
     try
     {
-        var context = services.GetRequiredService<PostDbContext>();
-        context.Database.Migrate();
+        var dbContextFactory = services.GetRequiredService<IDbContextFactory<PostDbContext>>();
+        using var context = dbContextFactory.CreateDbContext(); // Lấy DbContext từ scope
+        context.Database.Migrate(); // Chạy migration
     }
     catch (Exception ex)
     {
@@ -82,6 +88,7 @@ using (var scope = app.Services.CreateScope())
         throw;
     }
 }
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

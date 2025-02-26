@@ -26,6 +26,13 @@ namespace PostPresentation.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getHome")]
+        public async Task<IActionResult> GetHomeAll([FromQuery] string Accountname, int count)
+        {
+            var result = await _postService.GetListForHomePage(Accountname, count);
+            return Ok(result);
+        }
+
         [HttpPost()]
         public async Task<IActionResult> Create([FromBody] CreatePostViewModel request)
         {
