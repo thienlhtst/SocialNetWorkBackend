@@ -51,7 +51,7 @@ namespace UserPresentation.Controllers
             {
                 var token = GenerateJwtToken(checkaccount);
 
-                return Ok(new { token });
+                return Ok(new { token, checkaccount.AccountName });
             }
 
             return Unauthorized("Invalid login attempt.");
@@ -75,7 +75,7 @@ namespace UserPresentation.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

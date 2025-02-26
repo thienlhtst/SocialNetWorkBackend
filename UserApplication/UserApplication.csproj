@@ -19,8 +19,4 @@
     <ProjectReference Include="..\UserInfrastructure\UserInfrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModel\Enum\" />
-  </ItemGroup>
-
 </Project>

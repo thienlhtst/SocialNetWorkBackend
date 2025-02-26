@@ -55,9 +55,9 @@ namespace PostInfrastructure.Migrations
                             Id = "4752c4fe-1546-4c01-a46f-e9fcab755389",
                             AccountName = "tienminh",
                             Content = "Test Du lieu Comment xiu di ban oi",
-                            CreatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 194, DateTimeKind.Local).AddTicks(1346),
-                            ParentId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
-                            UpdatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 194, DateTimeKind.Local).AddTicks(1740)
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 582, DateTimeKind.Local).AddTicks(6412),
+                            ParentId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 582, DateTimeKind.Local).AddTicks(6690)
                         });
                 });
 
@@ -98,7 +98,7 @@ namespace PostInfrastructure.Migrations
                             Height = 0.0,
                             MediaName = "testdulieu",
                             MediaType = 0,
-                            ParentId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
+                            ParentId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
                             Url = "/test",
                             Width = 0.0
                         });
@@ -138,10 +138,28 @@ namespace PostInfrastructure.Migrations
                         {
                             Id = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b",
                             AccountName = "thienzn",
-                            Content = "Test Du lieu xiu di ban oi",
-                            CreatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 191, DateTimeKind.Local).AddTicks(9697),
+                            Content = "AI đang thay đổi thế giới như thế nào?",
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(3369),
                             Privacy = 1,
-                            UpdatedAt = new DateTime(2025, 2, 13, 15, 55, 20, 192, DateTimeKind.Local).AddTicks(265)
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(3708)
+                        },
+                        new
+                        {
+                            Id = "c3d5e7a9-b1f2-40c3-d4e5-a6b7c8f9d0e1",
+                            AccountName = "tienminh",
+                            Content = "Chung kết Champions League sắp diễn ra!",
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4596),
+                            Privacy = 1,
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4596)
+                        },
+                        new
+                        {
+                            Id = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
+                            AccountName = "minhthanh",
+                            Content = "Bản hit mới nhất của ca sĩ X đang làm mưa làm gió",
+                            CreatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4603),
+                            Privacy = 1,
+                            UpdatedAt = new DateTime(2025, 2, 26, 14, 50, 46, 581, DateTimeKind.Local).AddTicks(4604)
                         });
                 });
 
@@ -156,6 +174,176 @@ namespace PostInfrastructure.Migrations
                     b.HasKey("AccountName", "PostIdOrCommentId");
 
                     b.ToTable("Reaction", (string)null);
+                });
+
+            modelBuilder.Entity("PostCore.Entities.Topic", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CountTopic")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Topic", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0",
+                            CountTopic = 0,
+                            Name = "Công nghệ"
+                        },
+                        new
+                        {
+                            Id = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7",
+                            CountTopic = 0,
+                            Name = "Thể thao"
+                        },
+                        new
+                        {
+                            Id = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0",
+                            CountTopic = 0,
+                            Name = "Âm nhạc"
+                        });
+                });
+
+            modelBuilder.Entity("PostCore.Entities.TopicPost", b =>
+                {
+                    b.Property<string>("TopicId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PostId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("TopicId", "PostId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("TopicPost", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            TopicId = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0",
+                            PostId = "4aa068ad-f48a-42c0-ad99-de7b5e8ad15b"
+                        },
+                        new
+                        {
+                            TopicId = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7",
+                            PostId = "c3d5e7a9-b1f2-40c3-d4e5-a6b7c8f9d0e1"
+                        },
+                        new
+                        {
+                            TopicId = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0",
+                            PostId = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
+                        });
+                });
+
+            modelBuilder.Entity("PostCore.Entities.TopicUser", b =>
+                {
+                    b.Property<string>("TopicId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("TopicId", "AccountName");
+
+                    b.ToTable("TopicUser", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            TopicId = "d1a5b0c3-4e6f-47a1-b2c4-d5e6f7a8b9c0",
+                            AccountName = "thienminh"
+                        },
+                        new
+                        {
+                            TopicId = "a2b3c4d5-e6f7-48a9-b0c1-d2e3f4a5b6c7",
+                            AccountName = "thienminh"
+                        },
+                        new
+                        {
+                            TopicId = "e5f6a7b8-c9d0-41e2-b3f4-a5c6d7e8f9b0",
+                            AccountName = "thienminh"
+                        });
+                });
+
+            modelBuilder.Entity("PostCore.Entities.UserPostViews", b =>
+                {
+                    b.Property<string>("PostId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.HasKey("PostId", "AccountName");
+
+                    b.ToTable("UserPostViews", (string)null);
+                });
+
+            modelBuilder.Entity("PostCore.Entities.TopicPost", b =>
+                {
+                    b.HasOne("PostCore.Entities.Posts", "Posts")
+                        .WithMany("TopicPosts")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PostCore.Entities.Topic", "Topic")
+                        .WithMany("TopicPosts")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Posts");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("PostCore.Entities.TopicUser", b =>
+                {
+                    b.HasOne("PostCore.Entities.Topic", "Topic")
+                        .WithMany("TopicUsers")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("PostCore.Entities.UserPostViews", b =>
+                {
+                    b.HasOne("PostCore.Entities.Posts", "Posts")
+                        .WithMany("UserPostViews")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("PostCore.Entities.Posts", b =>
+                {
+                    b.Navigation("TopicPosts");
+
+                    b.Navigation("UserPostViews");
+                });
+
+            modelBuilder.Entity("PostCore.Entities.Topic", b =>
+                {
+                    b.Navigation("TopicPosts");
+
+                    b.Navigation("TopicUsers");
                 });
 #pragma warning restore 612, 618
         }

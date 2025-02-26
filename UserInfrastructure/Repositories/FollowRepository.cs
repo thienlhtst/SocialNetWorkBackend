@@ -64,5 +64,15 @@ namespace UserInfrastructure.Repositories
             var result = await _followbase.Delete(reponse);
             return result;
         }
+
+        public int CheckFollowFromUser(string requestId, string recipientId)
+        {
+            var result = _userDbContext.Follows.FirstOrDefault(x => x.UserIdFollower.Equals(requestId)&& x.UserIdFollowee.Equals(recipientId));
+            if (result!= null) return 1;//da follow
+            var result1 = _userDbContext.Follows.FirstOrDefault(x => x.UserIdFollower.Equals(recipientId)&& x.UserIdFollowee.Equals(requestId));
+            if (result1== null) return 2;// nguoi nhan yeu cau da follow
+
+            return 0;//
+        }
     }
 }

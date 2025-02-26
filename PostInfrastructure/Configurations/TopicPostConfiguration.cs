@@ -13,8 +13,9 @@ namespace PostInfrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<TopicPost> builder)
         {
-            builder.ToTable("TopicPost");
-            builder.HasKey(e => new { e.TopicId, e.PostId });
+            builder.ToTable("TopicPost").HasKey(e => new { e.TopicId, e.PostId });
+            builder.HasOne(x => x.Posts).WithMany(x => x.TopicPosts).HasForeignKey(x => x.PostId);
+            builder.HasOne(x => x.Topic).WithMany(x => x.TopicPosts).HasForeignKey(x => x.TopicId);
         }
     }
 }

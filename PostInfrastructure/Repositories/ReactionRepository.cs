@@ -12,15 +12,18 @@ namespace PostInfrastructure.Repositories
     public class ReactionRepository : IReactionRepository
     {
         private readonly PostDbContext _postDbContext;
+        private readonly IDbContextFactory<PostDbContext> _contextFactory;
 
-        public ReactionRepository(PostDbContext postDbContext)
+        public ReactionRepository(PostDbContext postDbContext, IDbContextFactory<PostDbContext> contextFactory)
         {
-            _postDbContext = postDbContext;
+            _postDbContext=postDbContext;
+            _contextFactory=contextFactory;
         }
 
         public async Task<int> CountReaction(string id)
         {
-            var count = await _postDbContext.Reactions.Where(x => x.PostIdOrCommentId.Equals(id)).CountAsync();
+            using var context = _contextFactory.CreateDbContext();
+            var count = await context.Reactions.Where(x => x.PostIdOrCommentId.Equals(id)).CountAsync();
 
             return count;
         }
@@ -45,7 +48,8 @@ namespace PostInfrastructure.Repositories
 
         public async Task<bool> FindUserReaction(string id, string AccountName)
         {
-            var count = await _postDbContext.Reactions.FirstOrDefaultAsync(x => x.PostIdOrCommentId.Equals(id) && x.AccountName.Equals(AccountName));
+            using var context = _contextFactory.CreateDbContext();
+            var count = await context.Reactions.FirstOrDefaultAsync(x => x.PostIdOrCommentId.Equals(id) && x.AccountName.Equals(AccountName));
             if (count == null) return false;
             return true;
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using UserApplication.Interfaces;
 using UserApplication.ViewModel.UserViewModel;
@@ -28,18 +29,26 @@ namespace UserPresentation.Controllers
             return Ok(result);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("userinfo/{name}")]
         public async Task<IActionResult> GetUserInfo(string name)
         {
-            var username = await _userService.GetstringAccountUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var result = await _userService.GetInformationUser(name);
+            var username = await _userService.GetstringAccountUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
+            var result = await _userService.GetInformationUser(name, User.FindFirst(ClaimTypes.NameIdentifier)?.Value?? "");
             if (username ==name)
             {
                 result.Type="private";
-
+                result.IsFollow=0;
                 return Ok(result);
             }
+            result.Type="public";
+            return Ok(result);
+        }
+
+        [HttpGet("userinfowithoutauthor/{name}")]
+        public async Task<IActionResult> GetUserInfoWithoutAuthour(string name)
+        {
+            var result = await _userService.GetInformationUser(name, "");
             result.Type="public";
             return Ok(result);
         }
@@ -47,14 +56,14 @@ namespace UserPresentation.Controllers
         [HttpGet("information/{id}")]
         public async Task<IActionResult> GetInformationAccout(string id)
         {
-            var result = await _userService.GetInformationUser(id);
+            var result = await _userService.GetInformationUser(id, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             return Ok(result);
         }
 
         [HttpGet("sreachUser/{requestString}")]
         public async Task<IActionResult> GetListSreachUser(string requestString)
         {
-            var result = await _userService.GetListSreachUser(requestString);
+            var result = await _userService.GetListSreachUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value??"", requestString);
             return Ok(result);
         }
 
@@ -65,17 +74,28 @@ namespace UserPresentation.Controllers
             return Ok(result);
         }
 
-        [HttpPut("changeInfo/{id}")]
-        public async Task<IActionResult> ChangeInforAccount(string id, RequestUpdateUserVM request)
+        [Authorize]
+        [HttpPut("updateAvatar")]
+        public async Task<IActionResult> ChangeAvatar(IFormFile request)
         {
-            var result = await _userService.UpdateInformationUser(id, request);
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
+            var result = await _userService.UpdateAvatarUser(username, new RequestUpdateAvatarUserVM { file=request });
+
             return Ok(result);
         }
 
-        [HttpGet("GetListFollow/{id}")]
-        public async Task<IActionResult> GetFollowerOrFolloweeUser(string id, string type, bool typePrivate = true)
+        [Authorize]
+        [HttpPut("changeInfo")]
+        public async Task<IActionResult> ChangeInforAccount(RequestUpdateUserVM request)
         {
-            var result = await _userService.GetFollowerOrFolloweeUser(id, type, typePrivate);
+            var result = await _userService.UpdateInformationUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "", request);
+            return Ok(result);
+        }
+
+        [HttpGet("GetListFollow/{accountname}")]
+        public async Task<IActionResult> GetFollowerOrFolloweeUser(string accountname, string type, bool typePrivate = true)
+        {
+            var result = await _userService.GetFollowerOrFolloweeUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "", accountname, type, typePrivate);
             return Ok(result);
         }
     }

@@ -10,6 +10,8 @@ namespace PostCore.Entities
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public int HotTopic {  get; set; } = 0;
+        public int CountTopic { get; set; } = 0;
+        public List<TopicUser> TopicUsers { get; set; } = new List<TopicUser>();
+        public List<TopicPost> TopicPosts { get; set; } = new List<TopicPost>();
     }
 }

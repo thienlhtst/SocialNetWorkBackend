@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserApplication.Interfaces;
+using UserApplication.ViewModel.Enum;
 using UserApplication.ViewModel.UserViewModel;
 using UserCore.Entities;
 using UserCore.InterfaceRepositories;
@@ -20,13 +21,15 @@ namespace UserApplication.Services
         private readonly IUserRepository _userRepository;
         private readonly IRequestClient<AccountNameEvent> _requestClient;
         private readonly IStorageService _storageService;
+        private readonly IFollowRepository _followRepository;
 
-        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IStorageService storageService, IRequestClient<AccountNameEvent> requestClient)
+        public UserService(IBaseRepository<User> baseRepository, IUserRepository userRepository, IRequestClient<AccountNameEvent> requestClient, IStorageService storageService, IFollowRepository followRepository)
         {
             _baseRepository=baseRepository;
             _userRepository=userRepository;
-            _storageService=storageService;
             _requestClient=requestClient;
+            _storageService=storageService;
+            _followRepository=followRepository;
         }
 
         public async Task<UserCommentEvent> getUsercommentbyAccountName(string accountName)
@@ -59,10 +62,19 @@ namespace UserApplication.Services
             return 0;
         }
 
-        public async Task<ResponseInformationUserVM?> GetInformationUser(string requestName)
+        public async Task<ResponseInformationUserVM?> GetInformationUser(string requestName, string currentID)
         {
             var response = await _userRepository.GetInfoUser(requestName);
             response.UrlAvatar = _storageService.GetFileUrl(response.UrlAvatar);
+            var Isfollow = 0;//chua follow
+            if (response.Followers.FirstOrDefault(x => x.UserIdFollower.Equals(currentID)) != null)
+            {
+                Isfollow=1; // da follow
+            }
+            if (response.Followees.FirstOrDefault(x => x.UserIdFollower.Equals(currentID)) != null)
+            {
+                Isfollow=2;// follow lai
+            }
             ResponseListPostViewModel? postViewModelEvent = null;
 
             try
@@ -87,6 +99,7 @@ namespace UserApplication.Services
             {
                 InfoUser =response
             ,
+                IsFollow=Isfollow,
                 Type="public",
                 PostViewModelEvent= postViewModelEvent.resultofrespone,
             };
@@ -98,10 +111,24 @@ namespace UserApplication.Services
             return response;
         }
 
-        public async Task<List<User>> GetFollowerOrFolloweeUser(string requestId, string type, bool typePrivate)
+        public async Task<List<UserFollowProfileVM>> GetFollowerOrFolloweeUser(string OwnnerId, string requestAccountname, string type, bool typePrivate)
         {
-            var result = await _userRepository.GetFollowerOrFolloweeUser(requestId, type, typePrivate);
-            return result;
+            var user = await _userRepository.GetbyAccountName(requestAccountname);
+            var result = await _userRepository.GetFollowerOrFolloweeUser(user.Id, type, typePrivate);
+            if (result == null) return new List<UserFollowProfileVM> { };
+            var finalresult = result.Select(x =>
+            {
+                var check = _followRepository.CheckFollowFromUser(OwnnerId, x.Id);
+                return new UserFollowProfileVM
+                {
+                    Id= x.Id,
+                    AccountName= x.AccountName,
+                    FullName= x.FullName,
+                    Src=x.UrlAvatar,
+                    IsFollow=check,
+                };
+            }).ToList();
+            return finalresult;
         }
 
         public async Task<User?> UpdateInformationUser(string IdUser, RequestUpdateUserVM request)
@@ -111,11 +138,11 @@ namespace UserApplication.Services
             {
                 entity.FullName = request.FullName;
                 entity.AccountName = request.AcountName;
-                entity.Email = request.Email;
+                //  entity.Email = request.Email;
                 entity.Title = request.Title;
                 entity.Links = request.Links;
-                entity.AccountConfirmed = request.AccountConfirmed;
-
+                // entity.AccountConfirmed = request.AccountConfirmed;
+                entity.AccountPrivated = request.AccountPrivated;
                 entity.Active = entity.Active;  // Giữ
                 var reponse = await _baseRepository.Update(entity);
                 return reponse;
@@ -128,7 +155,9 @@ namespace UserApplication.Services
             var entity = await _baseRepository.GetbyId(IdUser);
             if (entity != null)
             {
-                entity.UrlAvatar = entity+"_avatar";
+                string fileName = request.file.FileName;
+                string fileExtension = Path.GetExtension(fileName);
+                entity.UrlAvatar = entity.AccountName+"_avatar"+fileExtension;
                 await _storageService.SaveFileAsync(request.file.OpenReadStream(), entity.UrlAvatar);
                 var reponse = await _baseRepository.Update(entity);
                 return reponse;
@@ -136,16 +165,35 @@ namespace UserApplication.Services
             return entity;
         }
 
-        public async Task<List<User>?> GetListSreachUser(string request)
+        public async Task<List<UserSreachVM>?> GetListSreachUser(string OwnId, string request)
         {
             var response = await _userRepository.GetUserToSreach(request);
-            return response;
+            if (response==null) return new List<UserSreachVM>();
+            var result = response.Select(x =>
+            {
+                var isFollow = statusFollow.Follow;
+                if (x.Followees.FirstOrDefault(x => x.UserIdFollower==OwnId)!=null)
+                    isFollow = statusFollow.Followed;
+                return new UserSreachVM
+                {
+                    AccountName = x.AccountName,
+                    FullName=x.FullName,
+                    Title= x.Title,
+                    UrlAvatar = x.UrlAvatar,
+                    Followers= x.Followees.Count(),
+                    IsFollow=isFollow,
+                };
+            }).ToList();
+            return result;
         }
 
         public async Task<string> GetstringAccountUser(string requestid)
         {
+            var accountname = "";
+
             var response = await _baseRepository.GetbyId(requestid);
-            return response.AccountName ??"";
+            if (response != null) { return response.AccountName; }
+            return accountname;
         }
     }
 }

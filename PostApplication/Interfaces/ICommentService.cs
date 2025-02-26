@@ -10,5 +10,7 @@ namespace PostApplication.Interfaces
     public interface ICommentService
     {
         public Task<List<CommentViewModel>> GetAllCommentbyParentId(string parentid, string accountname);
+
+        public Task<int> CreateComment(RequestCreateCommentVM request);
     }
 }

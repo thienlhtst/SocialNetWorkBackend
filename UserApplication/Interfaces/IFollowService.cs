@@ -12,6 +12,8 @@ namespace UserApplication.Interfaces
     {
         public Task<List<Follow>> Getall();
 
+        public Task<int> CheckFollowFromUser(string requestId, string recipientId);
+
         public Task<int> RequestFollowTo(RequestFollowVM request);
 
         public Task<int> ResponseFollowPrivateUser(RequestFollowVM request);
